@@ -5,12 +5,14 @@
 
 #include "../core/world.hpp"
 
-struct Renderer {;
+struct Renderer {
     bool exit;
 
     Renderer(sf::RenderWindow &window);
 
     void render(World&);
+
+    sf::Vector2f projectObjectCoordinates(sf::Vector2f&);
 
     private:
         sf::RenderWindow &window;

@@ -1,16 +1,17 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <SFML/System.hpp>
 #include <iostream>
+#include <memory>
 #include <cmath>
 
-struct Player {
-    sf::Vector2<int> direction;
-    sf::Vector2<int> position;
-    float            angle;
+#include "entity.hpp"
 
-    Player(): direction(0, 0), position(500, 500), angle(M_PI) {}
+struct Player: Entity {
+    sf::Vector2<float> direction;
+    float              angle;
+
+    Player(): Entity(500.f, 500.f), direction(0.f, 0.f), angle(M_PI) { }
 };
 
 #endif
