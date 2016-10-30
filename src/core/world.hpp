@@ -11,9 +11,9 @@ struct World {
     // The first player in that list is the player controlled locally.
     std::vector<std::shared_ptr<Player>> players;
 
-    sf::Vector2<int> worldDimensions;
+    sf::Vector2f dimensions;
 
-    World(): worldDimensions(1000, 1000), players(4) {
+    World(): dimensions(1000, 1000), players() {
         players.push_back(std::shared_ptr<Player>(new Player()));
     }
 

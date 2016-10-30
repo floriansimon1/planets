@@ -3,16 +3,13 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "./world-space.hpp"
 #include "../core/world.hpp"
 
 struct Renderer {
-    bool exit;
-
     Renderer(sf::RenderWindow &window);
 
-    void render(World&);
-
-    sf::Vector2f projectObjectCoordinates(sf::Vector2f&);
+    void render(World&) const;
 
     private:
         sf::RenderWindow &window;

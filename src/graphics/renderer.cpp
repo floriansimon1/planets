@@ -1,33 +1,51 @@
-#include "renderer.hpp"
+#include "./renderer.hpp"
+#include "./world-space.hpp"
 
 #include <algorithm>
 
-Renderer::Renderer(sf::RenderWindow &w): exit(false), window(w) {
+Renderer::Renderer(sf::RenderWindow &w): window(w) {
     window.setFramerateLimit(60);
 }
 
-sf::Vector2f Renderer::projectObjectCoordinates(sf::Vector2f &coordinates) {
+void Renderer::render(World &world) const {
+    const WorldSpace minimap(world.dimensions * 2.f);
 
-}
+    sf::View minimapView(sf::FloatRect(
+        2.f * world.dimensions.x,
+        2.f * world.dimensions.y,
+        world.dimensions.x,
+        world.dimensions.y
+    ));
 
-void Renderer::render(World &world) {
-    sf::View view(
-        sf::Vector2f(world.players[0]->position.x, world.players[0]->position.y),
-        sf::Vector2f(100, 100)
-    );
+    sf::View worldView(world.players[0]->position, sf::Vector2f(100, 100));
 
-    sf::CircleShape spaceship(5.f, 3);
+    sf::RectangleShape minimapBackground(world.dimensions);
+    sf::CircleShape    spaceship(5.f, 3);
+
+    spaceship.setFillColor(sf::Color::Red);
+    minimapBackground.setFillColor(sf::Color(0, 0, 128, 200));
 
     window.clear();
 
-    spaceship.setFillColor(sf::Color::Red);
+    minimapView.setViewport(sf::FloatRect(0.7, 0.8, 0.25, 0.15));
 
-    std::for_each(world.players.begin(), world.players.end(), [&spaceship, this] (auto it) {
-        spaceship.setPosition(it->position);
+    window.setView(minimapView);
+    minimapBackground.setPosition(0.f, 0.f);
+    minimap.draw(window, minimapBackground);
 
-        window.draw(spaceship);
-    });
+    std::for_each(
+        world.players.begin(),
+        world.players.end(),
+        [&spaceship, &worldView, &minimapView, &minimap, this] (auto it) {
+            spaceship.setPosition(it->position);
 
-    window.setView(view);
+            window.setView(worldView);
+            window.draw(spaceship);
+
+            window.setView(minimapView);
+            minimap.draw(window, spaceship);
+        }
+    );
+
     window.display();
 }
