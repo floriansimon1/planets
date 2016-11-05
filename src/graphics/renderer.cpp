@@ -22,6 +22,12 @@ void Renderer::render(World &world) const {
     sf::RectangleShape minimapBackground(world.dimensions);
     sf::CircleShape    spaceship(5.f, 3);
 
+    // Center of rotation.
+    spaceship.setOrigin(5.f, 5.f);
+
+    // Makes the front of the spaceship stand out.
+    spaceship.scale(0.8f, 1.3f);
+
     spaceship.setFillColor(sf::Color::Red);
     minimapBackground.setFillColor(sf::Color(0, 0, 128, 200));
 
@@ -36,11 +42,16 @@ void Renderer::render(World &world) const {
     std::for_each(
         world.players.begin(),
         world.players.end(),
-        [&spaceship, &worldView, &minimapView, &minimap, this] (auto it) {
-            spaceship.setPosition(it->position);
+
+        [&spaceship, &worldView, &minimapView, &minimap, this] (auto player) {
+            spaceship.setPosition(player->position);
+
+            spaceship.rotate(player->yaw);
 
             window.setView(worldView);
             window.draw(spaceship);
+
+            spaceship.rotate(-spaceship.getRotation());
 
             window.setView(minimapView);
             minimap.draw(window, spaceship);

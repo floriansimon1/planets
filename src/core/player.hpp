@@ -9,9 +9,11 @@
 
 struct Player: Entity {
     sf::Vector2<float> direction;
-    float              angle;
 
-    Player(): Entity(500.f, 500.f), direction(0.f, 0.f), angle(M_PI) { }
+    // In degrees.
+    float yaw;
+
+    Player(): Entity(500.f, 500.f), direction(0.f, 0.f), yaw(0.f) { }
 };
 
 #endif
