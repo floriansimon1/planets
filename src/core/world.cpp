@@ -10,19 +10,17 @@ void World::makeNextFrame(std::vector<Controller*> &controllers) {
         controllers.end(),
 
         [&elapsedTime, this] (Controller *controller) {
-            const auto yawChangeMultiplier = (
-                (controller->turnLeft() ? -1.f : 0.f)
-                + (controller->turnRight() ? 1.f : 0.f)
+            controller->player->yaw = controller->player->computeNewYaw(
+                elapsedTime,
+                controller->turnLeft(),
+                controller->turnRight()
             );
 
-            if (yawChangeMultiplier) {
-                const auto absoluteYawChange = (
-                    elapsedTime.asMilliseconds()
-                    * (yawChangeSpeed / 1000.f)
-                );
-
-                controller->player->yaw += absoluteYawChange * yawChangeMultiplier;
-            }
+            controller->player->speed = controller->player->computeNewSpeed(
+                elapsedTime,
+                controller->accelerate(),
+                controller->accelerateBackward()
+            );
         }
     );
 

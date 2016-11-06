@@ -9,3 +9,11 @@ bool Controller::turnLeft() const {
 bool Controller::turnRight() const {
     return sf::Keyboard::isKeyPressed(sf::Keyboard::Right);
 }
+
+bool Controller::accelerateBackward() const {
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::Down);
+}
+
+bool Controller::accelerate() const {
+    return sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
+}

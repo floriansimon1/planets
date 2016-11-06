@@ -11,6 +11,8 @@ struct Controller {
 
     Controller(std::shared_ptr<Player> p): player(p) {}
 
+    bool accelerateBackward() const;
+    bool accelerate() const;
     bool turnRight() const;
     bool turnLeft() const;
 };

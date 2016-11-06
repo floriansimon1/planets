@@ -9,9 +9,6 @@
 #include "../io/controller.hpp"
 
 struct World {
-    // In degrees/s.
-    const float yawChangeSpeed = 180;
-
     sf::Clock    frameClock;
     sf::Vector2f dimensions;
 
