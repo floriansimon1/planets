@@ -3,6 +3,10 @@
 
 #include <algorithm>
 
+sf::Vector2f flip(const sf::Vector2f &position, const sf::Vector2f &dimensions) {
+    return dimensions - position;
+}
+
 Renderer::Renderer(sf::RenderWindow &w): window(w) {
     window.setFramerateLimit(60);
 }
@@ -17,7 +21,10 @@ void Renderer::render(World &world) const {
         world.dimensions.y
     ));
 
-    sf::View worldView(world.players[0]->position, sf::Vector2f(100, 100));
+    sf::View worldView(
+        flip(world.players[0]->position, world.dimensions),
+        sf::Vector2f(100.f, 100.f)
+    );
 
     sf::RectangleShape minimapBackground(world.dimensions);
     sf::CircleShape    spaceship(5.f, 3);
@@ -43,10 +50,11 @@ void Renderer::render(World &world) const {
         world.players.begin(),
         world.players.end(),
 
-        [&spaceship, &worldView, &minimapView, &minimap, this] (auto player) {
-            spaceship.setPosition(player->position);
+        [&spaceship, &worldView, &minimapView, &minimap, &world, this] (auto player) {
+            spaceship.setPosition(flip(player->position, world.dimensions));
 
-            spaceship.rotate(player->yaw);
+            // -180.f => By default, the spaceship faces down instead of up.
+            spaceship.rotate(player->yaw + 90.f - 180.f);
 
             window.setView(worldView);
             window.draw(spaceship);

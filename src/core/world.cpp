@@ -1,6 +1,9 @@
-#include "world.hpp"
-
 #include <algorithm>
+#include <iostream>
+
+#include "./world.hpp"
+
+#include "../math/vector2.hpp"
 
 void World::makeNextFrame(std::vector<Controller*> &controllers) {
     const auto elapsedTime = frameClock.getElapsedTime();
@@ -16,10 +19,27 @@ void World::makeNextFrame(std::vector<Controller*> &controllers) {
                 controller->turnRight()
             );
 
-            controller->player->speed = controller->player->computeNewSpeed(
+            controller->player->inertia = controller->player->computeNewInertia(
                 elapsedTime,
                 controller->accelerate(),
-                controller->accelerateBackward()
+                controller->accelerateBackward(),
+                controller->player->inertia,
+                controller->player->yaw
+            );
+
+            std::cout
+            << "("
+            << controller->player->position.x
+            << ", "
+            << controller->player->position.y
+            << ")"
+            << std::endl;
+
+            controller->player->position = controller->player->computeNewPosition(
+                elapsedTime,
+                controller->player->position,
+                controller->player->inertia,
+                dimensions
             );
         }
     );
