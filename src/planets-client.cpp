@@ -1,14 +1,20 @@
-#include <SFML/Graphics.hpp>
+#include <vector>
 #include <cstdlib>
+#include <unistd.h>
 
+#include <SFML/Graphics.hpp>
+
+#include "./network/hosted-game.hpp"
 #include "./graphics/renderer.hpp"
+#include "./network/client.hpp"
 #include "./io/controller.hpp"
 
 int main(void) {
     World            world;
-    sf::RenderWindow window(sf::VideoMode(900, 900), "Planets");
+    Client           client;
+    //sf::RenderWindow window(sf::VideoMode(900, 900), "Planets");
 
-    Controller controller(world.players[0]);
+    /*Controller controller(world.players[0]);
     Renderer   renderer(window);
 
     std::vector<Controller*> controllers;
@@ -34,6 +40,14 @@ int main(void) {
         world.makeNextFrame(controllers);
 
         renderer.render(world);
+    }*/
+
+    std::vector<std::shared_ptr<HostedGame>> games;
+
+    while (true) {
+        sleep(1);
+
+        client.updateAvailableGamesList(games);
     }
 
     return EXIT_SUCCESS;

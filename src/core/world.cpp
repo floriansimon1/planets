@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <iostream>
 
 #include "./world.hpp"
 
@@ -26,14 +25,6 @@ void World::makeNextFrame(std::vector<Controller*> &controllers) {
                 controller->player->inertia,
                 controller->player->yaw
             );
-
-            std::cout
-            << "("
-            << controller->player->position.x
-            << ", "
-            << controller->player->position.y
-            << ")"
-            << std::endl;
 
             controller->player->position = controller->player->computeNewPosition(
                 elapsedTime,
