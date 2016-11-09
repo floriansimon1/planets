@@ -2,15 +2,17 @@
 
 #include <unistd.h>
 
-#include "./network/server.hpp"
+#include "./network/server-communicator.hpp"
 
 int main(void) {
-    Server server;
+    ServerCommunicator server;
 
     while (true) {
-        sleep(4);
+        sleep(1);
 
         server.publish();
+
+        server.handleJoinRequest();
     }
 
     return EXIT_SUCCESS;

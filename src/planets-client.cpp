@@ -4,14 +4,14 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "./network/hosted-game.hpp"
+#include "./network/client-communicator.hpp"
 #include "./graphics/renderer.hpp"
-#include "./network/client.hpp"
 #include "./io/controller.hpp"
+#include "./network/host.hpp"
 
 int main(void) {
-    World            world;
-    Client           client;
+    World              world;
+    ClientCommunicator client;
     //sf::RenderWindow window(sf::VideoMode(900, 900), "Planets");
 
     /*Controller controller(world.players[0]);
@@ -42,12 +42,24 @@ int main(void) {
         renderer.render(world);
     }*/
 
-    std::vector<std::shared_ptr<HostedGame>> games;
+    std::vector<std::shared_ptr<Host>> games;
+
+    std::shared_ptr<Host> game = nullptr;
 
     while (true) {
         sleep(1);
 
-        client.updateAvailableGamesList(games);
+        if (!game) {
+            client.updateAvailableGamesList(games);
+
+            if (games.size() > 0) {
+                game = games[0];
+            }
+        } else {
+            client.joinGame(*game, "Paul");
+
+            break;
+        }
     }
 
     return EXIT_SUCCESS;

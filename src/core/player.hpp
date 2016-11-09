@@ -9,6 +9,8 @@
 #include "entity.hpp"
 
 struct Player: Entity {
+    std::string name;
+
     // In units/s.
     sf::Vector2f inertia;
 

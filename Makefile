@@ -20,8 +20,8 @@ server:
         src/io/*.cpp \
         src/core/*.cpp \
         src/math/*.cpp \
+        src/network/*.cpp \
         src/planets-server.cpp \
-        src/network/server.cpp \
         -o ./bin/planets-server \
         -lsfml-system -lsfml-window -lsfml-network \
         -g \
