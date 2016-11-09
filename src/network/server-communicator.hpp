@@ -8,6 +8,7 @@
 #include "./host.hpp"
 
 struct ServerCommunicator {
+    const bool         exit       = false;
     const unsigned int maxPlayers = 5;
 
     std::vector<Host> clients;
@@ -16,8 +17,11 @@ struct ServerCommunicator {
 
     ServerCommunicator();
 
-    void handleJoinRequest();
-    void publish();
+    void serve();
+
+    private:
+        void handleJoinRequest();
+        void publish();
 };
 
 #endif

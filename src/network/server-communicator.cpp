@@ -9,6 +9,12 @@ ServerCommunicator::ServerCommunicator() {
     socket.setBlocking(false);
 }
 
+void ServerCommunicator::serve() {
+    publish();
+
+
+}
+
 void ServerCommunicator::publish() {
     sf::Packet announcement;
 

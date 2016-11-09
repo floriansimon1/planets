@@ -7,12 +7,8 @@
 int main(void) {
     ServerCommunicator server;
 
-    while (true) {
-        sleep(1);
-
-        server.publish();
-
-        server.handleJoinRequest();
+    while (!server.exit) {
+        server.serve();
     }
 
     return EXIT_SUCCESS;
