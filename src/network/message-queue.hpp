@@ -1,15 +1,19 @@
 #ifndef MESSAGE_QUEUE_HPP
 #define MESSAGE_QUEUE_HPP
 
-#include <vector>
+#include <queue>
 
 #include "./message.hpp"
 
 struct MessageQueue {
-    void appendMessages(std::vector<Message> &newMessages);
+    void appendMessages(const std::vector<Message> &newMessages);
+
+    Message nextMessage();
+
+    bool isEmpty();
 
     private:
-        std::vector<Message> queue;
+        std::queue<Message> queue;
 };
 
 #endif

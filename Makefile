@@ -6,12 +6,12 @@ client:
         src/io/*.cpp \
         src/core/*.cpp \
         src/math/*.cpp \
+        src/client/*.cpp \
         src/network/*.cpp \
         src/graphics/*.cpp \
         src/planets-client.cpp \
         -o ./bin/planets \
         -lsfml-graphics -lsfml-system -lsfml-window -lsfml-network \
-        -g \
         ${VARS}
 
 server:
@@ -20,11 +20,12 @@ server:
         src/io/*.cpp \
         src/core/*.cpp \
         src/math/*.cpp \
+        src/server/*.cpp \
         src/network/*.cpp \
         src/planets-server.cpp \
         -o ./bin/planets-server \
-        -lsfml-system -lsfml-window -lsfml-network \
         -g \
+        -lsfml-system -lsfml-window -lsfml-network \
         ${VARS}
 
 all: client server

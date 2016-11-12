@@ -2,17 +2,28 @@
 #define COMMUNICATOR_HPP
 
 #include <SFML/Network.hpp>
+#include <memory>
+#include <map>
 
 #include "./message-queue.hpp"
+#include "./message-types.hpp"
+#include "./message-handler.hpp"
+#include "../core/agent-state.hpp"
+
+struct PacketReadError {};
 
 struct Communicator {
-    MessageQueue  messageQueue;
-    sf::UdpSocket socket;
+    std::map<MessageType, std::shared_ptr<MessageHandler>> messageHandlers;
+    MessageQueue                                           messageQueue;
+    sf::UdpSocket                                          socket;
 
-    void process();
+    void process(AgentState *state);
+
+    Communicator(const std::map<MessageType, std::shared_ptr<MessageHandler>> handlers): messageHandlers(handlers) {}
 
     private:
         std::vector<Message> readNextMessagesBatch(unsigned int batchSize);
+        void processNextMessagesBatch(AgentState *state, unsigned int batchSize);
 };
 
 #endif

@@ -1,10 +1,10 @@
-#include <iostream>
 #include <algorithm>
 
 #include <SFML/Network.hpp>
 
 #include "./client-communicator.hpp"
 #include "../boilerplate/remove-in.hpp"
+#include "../network/message-types.hpp"
 #include "../boilerplate/find-value-in-shared-pointer-collection.hpp"
 
 ClientCommunicator::ClientCommunicator() {
@@ -16,10 +16,15 @@ ClientCommunicator::ClientCommunicator() {
 }
 
 void ClientCommunicator::updateAvailableGamesList(std::vector<std::shared_ptr<Host>> &list) {
-    sf::Packet packet;
-    Host       game;
+    std::string    header;
+    sf::Packet     packet;
+    Host           game;
+    unsigned short _;
 
-    while (socket.receive(packet, game.address, game.port) == sf::Socket::Done) {
+    while (socket.receive(packet, game.address, _) == sf::Socket::Done) {
+        packet >> header;
+        packet >> game.port;
+
         auto existingGameEntry = findValueInSharedPointerCollection(list, game);
 
         if (existingGameEntry) {
@@ -42,7 +47,9 @@ void ClientCommunicator::joinGame(Host &game, const std::string &name) {
 
     joinPacket
     << "PLANETS"
+    << CONNECTION_REQUEST
+    << (sf::Uint16) 45007    // Client port.
     << name;
 
-    socket.send(joinPacket, game.address, SERVER_PORT);
+    socket.send(joinPacket, game.address, game.port);
 }

@@ -4,7 +4,7 @@
 
 #include <SFML/Graphics.hpp>
 
-#include "./network/client-communicator.hpp"
+#include "./client/client-communicator.hpp"
 #include "./graphics/renderer.hpp"
 #include "./io/controller.hpp"
 #include "./network/host.hpp"
