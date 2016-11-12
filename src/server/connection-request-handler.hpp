@@ -3,10 +3,11 @@
 
 #include "../network/message.hpp"
 #include "../core/agent-state.hpp"
+#include "../network/communicator.hpp"
 #include "../network/message-handler.hpp"
 
 struct ConnectionRequestHandler: MessageHandler {
-    virtual void handle(Message &message, AgentState *state);
+    virtual void handle(Communicator *communicator, Message &message, AgentState *state);
 };
 
 #endif

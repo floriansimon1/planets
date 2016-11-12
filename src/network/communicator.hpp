@@ -7,10 +7,11 @@
 
 #include "./message-queue.hpp"
 #include "./message-types.hpp"
-#include "./message-handler.hpp"
 #include "../core/agent-state.hpp"
 
 struct PacketReadError {};
+
+struct MessageHandler;
 
 struct Communicator {
     std::map<MessageType, std::shared_ptr<MessageHandler>> messageHandlers;

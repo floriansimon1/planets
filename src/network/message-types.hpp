@@ -5,6 +5,7 @@
 
 typedef sf::Uint16 MessageType;
 
-#define CONNECTION_REQUEST 0
+#define CONNECTION_REQUEST  0
+#define CONNECTION_RESPONSE 1
 
 #endif

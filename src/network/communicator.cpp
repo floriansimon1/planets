@@ -3,6 +3,7 @@
 #include "./host.hpp"
 #include "./message.hpp"
 #include "./communicator.hpp"
+#include "./message-handler.hpp"
 #include "../boilerplate/repeat-max.hpp"
 
 #define packetRead(packet, var) \
@@ -50,7 +51,7 @@ void Communicator::processNextMessagesBatch(AgentState *state, unsigned int batc
             packetRead(message.packet, type);
 
             if (messageHandlers.count(type)) {
-                messageHandlers[type]->handle(message, state);
+                messageHandlers[type]->handle(this, message, state);
             }
         } catch (PacketReadError&) {}
     }
