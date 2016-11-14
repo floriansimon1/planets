@@ -1,15 +1,11 @@
 #include <algorithm>
 
 #include "./host.hpp"
+#include "./network.hpp"
 #include "./message.hpp"
 #include "./communicator.hpp"
 #include "./message-handler.hpp"
 #include "../boilerplate/repeat-max.hpp"
-
-#define packetRead(packet, var) \
-    if (!(packet >> var)) { \
-        throw PacketReadError(); \
-    }
 
 static const unsigned int processBatchSize = 6;
 
@@ -62,4 +58,8 @@ void Communicator::process(AgentState *state) {
     messageQueue.appendMessages(readNextMessagesBatch(processBatchSize));
 
     processNextMessagesBatch(state, processBatchSize);
+}
+
+sf::Socket::Status Communicator::send(Message &message) {
+    return socket.send(message.packet, message.host.address, message.host.port);
 }

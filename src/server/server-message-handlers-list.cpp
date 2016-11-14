@@ -1,5 +1,5 @@
-#include "./message-handlers-list.hpp"
-#include "./connection-request-handler.hpp"
+#include "./server-message-handlers-list.hpp"
+#include "./handlers/connection-request-handler.hpp"
 
 std::map<MessageType, std::shared_ptr<MessageHandler>> serverHandlers() {
     std::map<MessageType, std::shared_ptr<MessageHandler>> handlers;

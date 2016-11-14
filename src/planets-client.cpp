@@ -4,14 +4,18 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "./client/messages/get-current-tick-request.hpp"
 #include "./client/client-communicator.hpp"
+#include "./client/client-state.hpp"
 #include "./graphics/renderer.hpp"
-#include "./io/controller.hpp"
+#include "./input/controller.hpp"
 #include "./network/host.hpp"
 
 int main(void) {
-    World              world;
-    ClientCommunicator client;
+    ClientState        state;
+    ClientCommunicator communicator;
+
+    state.name = "Paul";
     //sf::RenderWindow window(sf::VideoMode(900, 900), "Planets");
 
     /*Controller controller(world.players[0]);
@@ -44,23 +48,27 @@ int main(void) {
 
     std::vector<std::shared_ptr<Host>> games;
 
-    std::shared_ptr<Host> game = nullptr;
+    bool gameJoined = false;
 
     while (true) {
         sleep(1);
 
-        if (!game) {
-            client.updateAvailableGamesList(games);
+        if (!gameJoined) {
+            communicator.updateAvailableGamesList(games);
 
             if (games.size() > 0) {
-                game = games[0];
+                gameJoined = true;
+
+                communicator.joinGame(*games[0], state.name);
             }
         } else {
-            client.joinGame(*game, "Paul");
+            GetCurrentTickRequest request(*games[0]);
 
-            break;
+            communicator.send(request);
         }
     }
+
+
 
     return EXIT_SUCCESS;
 }

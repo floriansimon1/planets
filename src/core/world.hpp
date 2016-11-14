@@ -6,9 +6,10 @@
 #include <vector>
 
 #include "./player.hpp"
-#include "../io/controller.hpp"
+#include "../input/controller.hpp"
 
 struct World {
+    sf::Clock    worldClock;
     sf::Clock    frameClock;
     sf::Vector2f dimensions;
 

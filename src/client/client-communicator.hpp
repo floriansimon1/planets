@@ -7,11 +7,10 @@
 #include <vector>
 #include <memory>
 
+#include "../network/communicator.hpp"
 #include "../network/host.hpp"
 
-struct ClientCommunicator {
-    sf::UdpSocket socket;
-
+struct ClientCommunicator: Communicator {
     ClientCommunicator();
 
     void joinGame(Host &game, const std::string &name);

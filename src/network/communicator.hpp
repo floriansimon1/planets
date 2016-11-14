@@ -5,11 +5,10 @@
 #include <memory>
 #include <map>
 
+#include "./message.hpp"
 #include "./message-queue.hpp"
 #include "./message-types.hpp"
 #include "../core/agent-state.hpp"
-
-struct PacketReadError {};
 
 struct MessageHandler;
 
@@ -18,6 +17,7 @@ struct Communicator {
     MessageQueue                                           messageQueue;
     sf::UdpSocket                                          socket;
 
+    sf::Socket::Status send(Message &message);
     void process(AgentState *state);
 
     Communicator(const std::map<MessageType, std::shared_ptr<MessageHandler>> handlers): messageHandlers(handlers) {}

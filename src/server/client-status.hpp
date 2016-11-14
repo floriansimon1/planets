@@ -5,6 +5,6 @@
 
 typedef sf::Uint16 ClientStatus;
 
-#define CONNECTING 0;
+#define CONNECTING ((sf::Uint16) 0);
 
 #endif

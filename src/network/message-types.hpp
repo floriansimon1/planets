@@ -5,7 +5,8 @@
 
 typedef sf::Uint16 MessageType;
 
-#define CONNECTION_REQUEST  0
-#define CONNECTION_RESPONSE 1
+#define PING                ((sf::Uint16) 0)
+#define CONNECTION_REQUEST  ((sf::Uint16) 1)
+#define CONNECTION_RESPONSE ((sf::Uint16) 2)
 
 #endif

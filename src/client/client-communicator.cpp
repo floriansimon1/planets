@@ -5,9 +5,10 @@
 #include "./client-communicator.hpp"
 #include "../boilerplate/remove-in.hpp"
 #include "../network/message-types.hpp"
+#include "./client-message-handlers-list.hpp"
 #include "../boilerplate/find-value-in-shared-pointer-collection.hpp"
 
-ClientCommunicator::ClientCommunicator() {
+ClientCommunicator::ClientCommunicator(): Communicator(clientHandlers()) {
     if (socket.bind(BROADCAST_PORT) != sf::Socket::Done) {
         throw "NetworkError";
     }

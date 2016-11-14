@@ -6,7 +6,6 @@
 
 struct Host {
     unsigned short port;
-    unsigned int   latency;
     sf::IpAddress  address;
     sf::Clock      lastSeen;
 
