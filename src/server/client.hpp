@@ -1,7 +1,7 @@
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-#include "./client-status.hpp"
+#include "../core/client-status.hpp"
 #include "../network/host.hpp"
 
 struct Client: Host {

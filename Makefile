@@ -1,5 +1,3 @@
-VARS=-DSERVER_PORT=45001 -DBROADCAST_PORT=45002
-
 client:
 	g++ \
         -Wall \
@@ -13,7 +11,6 @@ client:
         src/client/messages/*.cpp \
         -o ./bin/planets \
         -lsfml-graphics -lsfml-system -lsfml-window -lsfml-network \
-        ${VARS}
 
 server:
 	g++ \
@@ -29,6 +26,5 @@ server:
         src/server/messages/*.cpp \
         -g \
         -lsfml-system -lsfml-window -lsfml-network \
-        ${VARS}
 
 all: client server

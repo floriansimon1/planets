@@ -1,11 +1,14 @@
 #include <algorithm>
+#include <unistd.h>
 
 #include <SFML/Network.hpp>
 
+#include "../network/ports.hpp"
 #include "./client-communicator.hpp"
 #include "../boilerplate/remove-in.hpp"
 #include "../network/message-types.hpp"
 #include "./client-message-handlers-list.hpp"
+#include "./messages/get-current-tick-request.hpp"
 #include "../boilerplate/find-value-in-shared-pointer-collection.hpp"
 
 ClientCommunicator::ClientCommunicator(): Communicator(clientHandlers()) {
@@ -53,4 +56,26 @@ void ClientCommunicator::joinGame(Host &game, const std::string &name) {
     << name;
 
     socket.send(joinPacket, game.address, game.port);
+}
+
+void ClientCommunicator::converse(ClientState &state) {
+    bool gameJoined = false;
+
+    while (true) {
+        sleep(1);
+
+        if (!gameJoined) {
+            updateAvailableGamesList(state.availableGames);
+
+            if (state.availableGames.size() > 0) {
+                gameJoined = true;
+
+                joinGame(*state.availableGames[0], state.name);
+            }
+        } else {
+            GetCurrentTickRequest request(*state.availableGames[0]);
+
+            send(request);
+        }
+    }
 }
