@@ -5,11 +5,11 @@
 #include "../math/vector2.hpp"
 
 World::World(): dimensions(300.f, 300.f) {
-    Player *player = new Player();
+    Player player;
 
-    player->name = "Peter";
+    player.name = "Peter";
 
-    players.push_back(std::shared_ptr<Player>(player));
+    players.push_back(player);
 }
 
 void World::makeNextFrame(std::vector<Controller*> &controllers) {

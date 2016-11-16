@@ -6,3 +6,13 @@ OutgoingMessage::OutgoingMessage(const Host &h) {
 
     packetWrite(packet, "PLANETS");
 }
+
+void OutgoingMessage::tryPrepare() {
+    if (prepared) {
+        return;
+    }
+
+    prepare();
+
+    prepared = true;
+}

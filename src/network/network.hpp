@@ -1,6 +1,9 @@
 #ifndef NETWORK_HPP
 #define NETWORK_HPP
 
+#include <SFML/System.hpp>
+#include <SFML/Network.hpp>
+
 struct PacketReadError {};
 struct PacketWriteError {};
 
@@ -14,7 +17,8 @@ struct PacketWriteError {};
         throw PacketWriteError(); \
     }
 
-#define preparePlanetsPacket(packet) \
-    ((packet) << "PLANETS")
+#define preparePlanetsPacket(packet) packetWrite(packet, "PLANETS")
+
+sf::Uint16 findAvailablePort();
 
 #endif

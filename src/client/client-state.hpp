@@ -1,9 +1,9 @@
 #ifndef CLIENT_STATE_HPP
 #define CLIENT_STATE_HPP
 
+#include <experimental/optional>
 #include <string>
 #include <vector>
-#include <memory>
 
 #include "../network/host.hpp"
 #include "../core/agent-state.hpp"
@@ -12,9 +12,9 @@
 struct ClientState: AgentState {
     ClientStatus status = SEARCHING;
 
-    std::vector<std::shared_ptr<Host>> availableGames;
-    std::string                        name;
-    Host                               game;
+    std::vector<Host>                 availableGames;
+    std::experimental::optional<Host> game;
+    std::string                       name;
 };
 
 #endif

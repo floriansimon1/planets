@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <unistd.h>
 
 #include "./client/client-communicator.hpp"
 #include "./client/client-state.hpp"
@@ -11,6 +12,8 @@ int main(void) {
     state.name = "Paul";
 
     while (state.status != EXIT) {
+        usleep(10000);
+
         communicator.converse(state);
     }
 

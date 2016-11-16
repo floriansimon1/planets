@@ -7,7 +7,7 @@
 #include "../../network/message-handler.hpp"
 
 struct ConnectionRequestHandler: MessageHandler {
-    virtual void handle(Communicator *communicator, Message &message, AgentState *state) const;
+    virtual void handle(Communicator &communicator, Message &message, AgentState &state) const;
 };
 
 #endif

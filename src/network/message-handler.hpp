@@ -2,13 +2,12 @@
 #define MESSAGE_HANDLER_HPP
 
 #include "./message.hpp"
-#include "./communicator.hpp"
-#include "../core/agent-state.hpp"
 
+struct AgentState;
 struct Communicator;
 
 struct MessageHandler {
-    virtual void handle(Communicator *communicator, Message &message, AgentState *state) const = 0;
+    virtual void handle(Communicator &communicator, Message &message, AgentState &state) const = 0;
 };
 
 #endif

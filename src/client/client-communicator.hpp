@@ -5,7 +5,6 @@
 
 #include <string>
 #include <vector>
-#include <memory>
 
 #include "../network/communicator.hpp"
 #include "../network/host.hpp"
@@ -16,9 +15,7 @@ struct ClientCommunicator: Communicator {
 
     void converse(ClientState &clientState);
 
-    void joinGame(Host &game, const std::string &name);
-
-    void updateAvailableGamesList(std::vector<std::shared_ptr<Host>> &list);
+    void updateAvailableGamesList(std::vector<Host> &list);
 };
 
 #endif

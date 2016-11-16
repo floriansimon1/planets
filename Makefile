@@ -1,5 +1,6 @@
 client:
 	g++ \
+		-std=c++1z \
         -Wall \
         src/core/*.cpp \
         src/math/*.cpp \
@@ -8,12 +9,14 @@ client:
         src/network/*.cpp \
         src/graphics/*.cpp \
         src/planets-client.cpp \
+        src/client/handlers/*.cpp \
         src/client/messages/*.cpp \
         -o ./bin/planets \
         -lsfml-graphics -lsfml-system -lsfml-window -lsfml-network \
 
 server:
 	g++ \
+		-std=c++1z \
         -Wall \
         src/core/*.cpp \
         src/math/*.cpp \

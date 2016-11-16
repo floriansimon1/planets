@@ -2,9 +2,6 @@
 #include "./server-communicator.hpp"
 #include "./server-message-handlers-list.hpp"
 
-#include <unistd.h>
-#include <iostream>
-
 ServerCommunicator::ServerCommunicator(): Communicator(serverHandlers()) {
     if (socket.bind(SERVER_PORT) != sf::Socket::Done) {
         throw "NetworkError";
@@ -15,8 +12,7 @@ ServerCommunicator::ServerCommunicator(): Communicator(serverHandlers()) {
 
 void ServerCommunicator::serve(ServerState &state) {
     publish(state);
-    process(&state);
-    sleep(1);
+    process(state);
 }
 
 void ServerCommunicator::publish(ServerState &state) {

@@ -14,7 +14,7 @@ struct World {
     sf::Vector2f dimensions;
 
     // The first player in that list is the player controlled locally.
-    std::vector<std::shared_ptr<Player>> players;
+    std::vector<Player> players;
 
     World();
 

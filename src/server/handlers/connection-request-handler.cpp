@@ -5,14 +5,14 @@
 #include <iostream>
 
 void ConnectionRequestHandler::handle(
-    Communicator *communicator,
+    Communicator &communicator,
     Message &message,
-    AgentState *statePointer
+    AgentState &statePointer
 ) const {
     // Copies the host - this is a direct reply.
     ConnectionAuthorized response(message.host);
 
     std::cout << "Connection detected" << std::endl;
 
-    communicator->send(response);
+    communicator.send(response);
 }

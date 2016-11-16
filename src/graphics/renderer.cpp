@@ -22,7 +22,7 @@ void Renderer::render(World &world) const {
     ));
 
     sf::View worldView(
-        flip(world.players[0]->position, world.dimensions),
+        flip(world.players[0].position, world.dimensions),
         sf::Vector2f(100.f, 100.f)
     );
 
@@ -51,10 +51,10 @@ void Renderer::render(World &world) const {
         world.players.end(),
 
         [&spaceship, &worldView, &minimapView, &minimap, &world, this] (auto player) {
-            spaceship.setPosition(flip(player->position, world.dimensions));
+            spaceship.setPosition(flip(player.position, world.dimensions));
 
             // -180.f => By default, the spaceship faces down instead of up.
-            spaceship.rotate(player->yaw + 90.f - 180.f);
+            spaceship.rotate(player.yaw + 90.f - 180.f);
 
             window.setView(worldView);
             window.draw(spaceship);

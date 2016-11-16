@@ -7,8 +7,13 @@
 struct OutgoingMessage: Message {
     OutgoingMessage(const Host &h);
 
+    void tryPrepare();
+
     protected:
         virtual void prepare() {}
+
+    private:
+        bool prepared = false;
 };
 
 #endif

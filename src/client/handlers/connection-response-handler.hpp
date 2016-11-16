@@ -1,9 +1,9 @@
-#ifndef GET_CURRENT_TICK_HANDLER
-#define GET_CURRENT_TICK_HANDLER
+#ifndef CONNECTION_RESPONSE_HANDLER_HPP
+#define CONNECTION_RESPONSE_HANDLER_HPP
 
 #include "../../network/message-handler.hpp"
 
-struct GetCurrentTickHandler: MessageHandler {
+struct ConnectionResponseHandler: MessageHandler {
     virtual void handle(Communicator &communicator, Message &message, AgentState &state) const;
 };
 

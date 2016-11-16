@@ -1,10 +1,7 @@
-#include <algorithm>
-
 #include "./host.hpp"
 #include "./network.hpp"
 #include "./message.hpp"
 #include "./communicator.hpp"
-#include "./message-handler.hpp"
 #include "../boilerplate/repeat-max.hpp"
 
 static const unsigned int processBatchSize = 6;
@@ -24,7 +21,7 @@ std::vector<Message> Communicator::readNextMessagesBatch(unsigned int batchSize)
     });
 }
 
-void Communicator::processNextMessagesBatch(AgentState *state, unsigned int batchSize) {
+void Communicator::processNextMessagesBatch(AgentState &state, unsigned int batchSize) {
     for (unsigned int i = 0; i < batchSize; i++) {
         Message     message;
         std::string header;
@@ -47,19 +44,21 @@ void Communicator::processNextMessagesBatch(AgentState *state, unsigned int batc
             packetRead(message.packet, type);
 
             if (messageHandlers.count(type)) {
-                messageHandlers[type]->handle(this, message, state);
+                messageHandlers[type]->handle(*this, message, state);
             }
         } catch (PacketReadError&) {}
     }
 }
 
 // Main network processing loop for the server.
-void Communicator::process(AgentState *state) {
+void Communicator::process(AgentState &state) {
     messageQueue.appendMessages(readNextMessagesBatch(processBatchSize));
 
     processNextMessagesBatch(state, processBatchSize);
 }
 
-sf::Socket::Status Communicator::send(Message &message) {
+sf::Socket::Status Communicator::send(OutgoingMessage &message) {
+    message.tryPrepare();
+
     return socket.send(message.packet, message.host.address, message.host.port);
 }
