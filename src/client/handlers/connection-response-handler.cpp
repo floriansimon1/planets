@@ -3,16 +3,15 @@
 #include "../../core/client-status.hpp"
 #include "./connection-response-handler.hpp"
 
-#include <iostream>
 void ConnectionResponseHandler::handle(Communicator &communicator, Message &message, AgentState &state) const {
     ClientState &clientState = (ClientState&) state;
 
     bool authorized;
 
     packetRead(message.packet, authorized);
-std::cout << "lol" << std::endl;
+
     if (authorized) {
-        clientState.status = PINGING;
+        clientState.status = SYNC;
     } else {
         clientState.status = SEARCHING;
     }

@@ -5,6 +5,7 @@
 #include <experimental/optional>
 
 #include "../network/ports.hpp"
+#include "../network/network.hpp"
 #include "./messages/join-game.hpp"
 #include "./client-communicator.hpp"
 #include "../boilerplate/remove-in.hpp"
@@ -13,11 +14,14 @@
 #include "./messages/get-current-tick-request.hpp"
 
 ClientCommunicator::ClientCommunicator(): Communicator(clientHandlers()) {
-    if (socket.bind(BROADCAST_PORT) != sf::Socket::Done) {
-        throw "NetworkError";
+    if (gameDiscoverySocket.bind(BROADCAST_PORT) != sf::Socket::Done) {
+        throw SocketBindError();
     }
 
+    bindToAnyAvailablePort(socket);
+
     socket.setBlocking(false);
+    gameDiscoverySocket.setBlocking(false);
 }
 
 void ClientCommunicator::updateAvailableGamesList(std::vector<Host> &list) {
@@ -26,7 +30,7 @@ void ClientCommunicator::updateAvailableGamesList(std::vector<Host> &list) {
     Host           game;
     unsigned short _;
 
-    while (socket.receive(packet, game.address, _) == sf::Socket::Done) {
+    while (gameDiscoverySocket.receive(packet, game.address, _) == sf::Socket::Done) {
         packet >> header;
         packet >> game.port;
 
@@ -45,7 +49,7 @@ void ClientCommunicator::updateAvailableGamesList(std::vector<Host> &list) {
     });
 }
 
-#include <iostream>
+// Network processing main loop.
 void ClientCommunicator::converse(ClientState &state) {
     process(state);
 
@@ -58,14 +62,15 @@ void ClientCommunicator::converse(ClientState &state) {
             state.status = CONNECTING;
             state.game   = std::experimental::optional<Host>(game);
 
-            JoinGame request(game, state.name);
+            JoinGame request(game, state.name, socket.getLocalPort());
 
             send(request);
         }
-    } else if (state.status == PINGING) {
-        std::cout << "Pingouin" << std::endl;
-        GetCurrentTickRequest request(*state.game);
+    } else if (state.status == SYNC) {
+        if (!state.currentlyExpectedPingRequestId) {
+            GetCurrentTickRequest request(state.game.value(), state.reserveNextPingRequestId());
 
-        send(request);
+            send(request);
+        }
     }
 }

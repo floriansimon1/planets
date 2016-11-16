@@ -6,9 +6,10 @@
 #include "../../network/outgoing-message.hpp"
 
 struct JoinGame: OutgoingMessage {
-    const std::string name;
+    const unsigned short localPort;
+    const std::string    name;
 
-    JoinGame(const Host &h, const std::string &n);
+    JoinGame(const Host &h, const std::string &n, unsigned short p);
 
     virtual void prepare();
 };

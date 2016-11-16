@@ -4,4 +4,5 @@
 
 void GetCurrentTickRequest::prepare() {
     packetWrite(packet, PING);
+    packetWrite(packet, requestId);
 }

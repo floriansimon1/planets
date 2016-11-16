@@ -2,11 +2,14 @@
 #include "../../network/network.hpp"
 #include "../../network/message-types.hpp"
 
-JoinGame::JoinGame(const Host &h, const std::string &n): OutgoingMessage(h), name(n) {}
-#include <iostream>
+JoinGame::JoinGame(const Host &h, const std::string &n, unsigned short p):
+    OutgoingMessage(h),
+    localPort(p),
+    name(n)
+{}
+
 void JoinGame::prepare() {
-    std::cout << "olol" << std::endl;
     packetWrite(packet, CONNECTION_REQUEST);
-    packetWrite(packet, findAvailablePort());
+    packetWrite(packet, localPort);
     packetWrite(packet, name);
 }

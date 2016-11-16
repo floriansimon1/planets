@@ -1,5 +1,7 @@
 #include "./network.hpp"
 
-sf::Uint16 findAvailablePort() {
-    return 45007;
+void bindToAnyAvailablePort(sf::UdpSocket &socket) {
+    if (socket.bind(45007) != sf::Socket::Done) {
+        throw SocketBindError();
+    }
 }

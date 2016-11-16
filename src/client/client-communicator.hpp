@@ -11,6 +11,8 @@
 #include "./client-state.hpp"
 
 struct ClientCommunicator: Communicator {
+    sf::UdpSocket gameDiscoverySocket;
+
     ClientCommunicator();
 
     void converse(ClientState &clientState);

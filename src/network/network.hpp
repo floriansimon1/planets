@@ -4,6 +4,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 
+struct SocketBindError {};
 struct PacketReadError {};
 struct PacketWriteError {};
 
@@ -19,6 +20,9 @@ struct PacketWriteError {};
 
 #define preparePlanetsPacket(packet) packetWrite(packet, "PLANETS")
 
-sf::Uint16 findAvailablePort();
+// An ID number that can be sent over the wire safely via packet stream operations.
+typedef sf::Uint16 Id;
+
+void bindToAnyAvailablePort(sf::UdpSocket &s);
 
 #endif
