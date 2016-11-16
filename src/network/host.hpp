@@ -3,6 +3,7 @@
 
 #include <SFML/Network.hpp>
 #include <SFML/System.hpp>
+#include <string>
 
 struct Host {
     unsigned short port;
@@ -12,6 +13,7 @@ struct Host {
     Host() {}
     Host(unsigned short p, sf::IpAddress &a): port(p), address(a) {}
 
+    std::string toString() const;
     bool operator==(const Host &g) const;
 };
 

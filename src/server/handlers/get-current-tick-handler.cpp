@@ -13,5 +13,7 @@ void GetCurrentTickHandler::handle(Communicator &communicator, Message &message,
 
     Pong pong(message.host, requestId, state.world.worldClock);
 
+    std::cout << ">> Received a ping" << std::endl;
+
     communicator.send(pong);
 }

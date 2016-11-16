@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 #include <unistd.h>
 
 #include <SFML/Network.hpp>
@@ -59,6 +60,12 @@ void ClientCommunicator::converse(ClientState &state) {
         if (state.availableGames.size() > 0) {
             const Host &game = state.availableGames[0];
 
+            std::cout
+            << ">> Connecting to first found game ("
+            << game.toString()
+            << ")..."
+            << std::endl;
+
             state.status = CONNECTING;
             state.game   = std::experimental::optional<Host>(game);
 
@@ -68,6 +75,8 @@ void ClientCommunicator::converse(ClientState &state) {
         }
     } else if (state.status == SYNC) {
         if (!state.currentlyExpectedPingRequestId) {
+            std::cout << ">> Initiating game clock synchronization..." << std::endl;
+
             GetCurrentTickRequest request(state.game.value(), state.reserveNextPingRequestId());
 
             send(request);

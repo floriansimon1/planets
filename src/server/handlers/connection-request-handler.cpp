@@ -18,7 +18,7 @@ void ConnectionRequestHandler::handle(
     // Copies the host - this is a direct reply.
     ConnectionAuthorized response(message.host);
 
-    std::cout << "Connection detected" << std::endl;
+    std::cout << ">> Connection request from " << message.host.toString() << std::endl;
 
     communicator.send(response);
 }

@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <iostream>
 #include <unistd.h>
 
 #include "./client/client-communicator.hpp"
@@ -10,6 +11,8 @@ int main(void) {
     ClientCommunicator communicator;
 
     state.name = "Paul";
+
+    std::cout << ">> PLANETS (client)" << std::endl;
 
     while (state.status != EXIT) {
         usleep(10000);

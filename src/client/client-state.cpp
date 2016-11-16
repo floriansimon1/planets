@@ -32,5 +32,5 @@ void ClientState::averageLatency() {
     // Set the first sample to the averaged value calculated above.
     latencySamples[0] = average;
 
-    std::cout << "Average latency is: " << average << std::endl;
+    latency.emplace(average);
 }

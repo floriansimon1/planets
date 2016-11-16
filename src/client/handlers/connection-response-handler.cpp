@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "../client-state.hpp"
 #include "../../network/network.hpp"
 #include "../../core/client-status.hpp"
@@ -11,8 +13,12 @@ void ConnectionResponseHandler::handle(Communicator &communicator, Message &mess
     packetRead(message.packet, authorized);
 
     if (authorized) {
+        std::cout << ">> Request to join game granted" << std::endl;
+
         clientState.status = SYNC;
     } else {
+        std::cout << ">> Request to join game denied" << std::endl;
+
         clientState.status = SEARCHING;
     }
 }
