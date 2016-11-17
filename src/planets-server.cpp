@@ -9,7 +9,7 @@ int main(void) {
     ServerCommunicator server;
     ServerState        state;
 
-    std::cout << "PLANETS (server)" << std::endl;
+    std::cout << ">> PLANETS (server)" << std::endl;
 
     while (!server.exit) {
         server.serve(state);
