@@ -12,32 +12,34 @@ World::World(): dimensions(300.f, 300.f) {
     players.push_back(player);
 }
 
-void World::makeNextFrame(std::vector<Controller*> &controllers) {
+void World::makeNextFrame(std::vector<Controller> &controllers) {
     const auto elapsedTime = frameClock.getElapsedTime();
 
     std::for_each(
         controllers.begin(),
         controllers.end(),
 
-        [&elapsedTime, this] (Controller *controller) {
-            controller->player->yaw = controller->player->computeNewYaw(
+        [&elapsedTime, this] (Controller &controller) {
+            auto &player = players[controller.playerIndex];
+
+            player.yaw = player.computeNewYaw(
                 elapsedTime,
-                controller->turnLeft(),
-                controller->turnRight()
+                controller.turnLeft(),
+                controller.turnRight()
             );
 
-            controller->player->inertia = controller->player->computeNewInertia(
+            player.inertia = player.computeNewInertia(
                 elapsedTime,
-                controller->accelerate(),
-                controller->accelerateBackward(),
-                controller->player->inertia,
-                controller->player->yaw
+                controller.accelerate(),
+                controller.accelerateBackward(),
+                player.inertia,
+                player.yaw
             );
 
-            controller->player->position = controller->player->computeNewPosition(
+            player.position = player.computeNewPosition(
                 elapsedTime,
-                controller->player->position,
-                controller->player->inertia,
+                player.position,
+                player.inertia,
                 dimensions
             );
         }

@@ -11,7 +11,7 @@ Renderer::Renderer(sf::RenderWindow &w): window(w) {
     window.setFramerateLimit(60);
 }
 
-void Renderer::render(World &world) const {
+void Renderer::render(const World &world) const {
     const WorldSpace minimap(world.dimensions * 2.f);
 
     sf::View minimapView(sf::FloatRect(

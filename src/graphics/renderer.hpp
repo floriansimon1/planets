@@ -9,7 +9,7 @@
 struct Renderer {
     Renderer(sf::RenderWindow &window);
 
-    void render(World&) const;
+    void render(const World&) const;
 
     private:
         sf::RenderWindow &window;

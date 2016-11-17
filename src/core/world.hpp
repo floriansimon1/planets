@@ -18,7 +18,7 @@ struct World {
 
     World();
 
-    void makeNextFrame(std::vector<Controller*>&);
+    void makeNextFrame(std::vector<Controller>&);
 
     private:
         World(World&);

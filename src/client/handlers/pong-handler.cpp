@@ -10,9 +10,11 @@ bool enoughLatencySamples(ClientState &state) {
 void PongHandler::handle(Communicator &communicator, Message &message, AgentState &s) const {
     ClientState &state = (ClientState&) s;
 
-    Id pongId;
+    Id        pongId;
+    sf::Int32 serverClockOffset;
 
     packetRead(message.packet, pongId);
+    packetRead(message.packet, serverClockOffset);
 
     if (state.currentlyExpectedPingRequestId && state.currentlyExpectedPingRequestId.value() == pongId) {
         sf::Int32 latency = state.pingTimer.stop().asMilliseconds() / 2;
@@ -24,9 +26,16 @@ void PongHandler::handle(Communicator &communicator, Message &message, AgentStat
 
             state.averageLatency();
 
-            std::cout << ">> Average latency: " << state.latency.value() << " ms" << std::endl;
+            state.world.worldClock.restart();
 
-            state.status = PLAYING;
+            state.serverClockOffset = serverClockOffset;
+            state.status            = PLAYING;
+
+            std::cout
+            << ">> Average latency: " << state.latency.value() << " ms\n"
+            << ">> Clock offset: " << serverClockOffset << " ms"
+            << std::endl;
+
         } else {
             GetCurrentTickRequest request(state.game.value(), state.reserveNextPingRequestId());
 

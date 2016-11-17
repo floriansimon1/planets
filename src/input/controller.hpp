@@ -1,15 +1,13 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include <memory>
-
 #include "../core/player.hpp"
 
 // Controller in the "gamepad" sense.
 struct Controller {
-    std::shared_ptr<Player> player;
+    unsigned int playerIndex;
 
-    Controller(std::shared_ptr<Player> p): player(p) {}
+    Controller(unsigned int pi): playerIndex(pi) {}
 
     bool accelerateBackward() const;
     bool accelerate() const;

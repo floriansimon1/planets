@@ -3,8 +3,6 @@
 
 #include "./world.hpp"
 
-struct AgentState {
-    World world;
-};
+struct AgentState {};
 
 #endif

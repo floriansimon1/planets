@@ -16,6 +16,7 @@ struct ClientState: AgentState {
     ClientStatus status = SEARCHING;
 
     std::experimental::optional<Id>        currentlyExpectedPingRequestId;
+    sf::Int32                              serverClockOffset;
     std::vector<sf::Int32>                 latencySamples;
     std::vector<Host>                      availableGames;
     Timer                                  pingTimer;

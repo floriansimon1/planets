@@ -1,11 +1,11 @@
 #ifndef CLIENT_HPP
 #define CLIENT_HPP
 
-#include "../core/client-status.hpp"
+#include "../core/player.hpp"
 #include "../network/host.hpp"
 
-struct Client: Host {
-    Client(Host &h): Host(h) {}
+struct Client: Player {
+    Host host;
 };
 
 #endif

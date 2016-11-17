@@ -1,12 +1,11 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <SFML/System.hpp>
 #include <iostream>
 #include <memory>
 
-#include <SFML/System.hpp>
-
-#include "entity.hpp"
+#include "./entity.hpp"
 
 struct Player: Entity {
     std::string name;
