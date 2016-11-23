@@ -9,6 +9,7 @@
 #include "../network/network.hpp"
 #include "./messages/join-game.hpp"
 #include "./client-communicator.hpp"
+#include "./messages/player-input.hpp"
 #include "../boilerplate/remove-in.hpp"
 #include "../network/message-types.hpp"
 #include "./client-message-handlers-list.hpp"
@@ -32,8 +33,9 @@ void ClientCommunicator::updateAvailableGamesList(std::vector<Host> &list) {
     unsigned short _;
 
     while (gameDiscoverySocket.receive(packet, game.address, _) == sf::Socket::Done) {
-        packet >> header;
-        packet >> game.port;
+        if (!(packet >> header >> game.port)) {
+            continue;
+        }
 
         auto existingGameEntry = std::find(list.begin(), list.end(), game);
 
@@ -54,32 +56,44 @@ void ClientCommunicator::updateAvailableGamesList(std::vector<Host> &list) {
 void ClientCommunicator::converse(ClientState &state) {
     process(state);
 
-    if (state.status == SEARCHING) {
-        updateAvailableGamesList(state.availableGames);
+    try {
+        if (state.status == SEARCHING) {
+            updateAvailableGamesList(state.availableGames);
 
-        if (state.availableGames.size() > 0) {
-            const Host &game = state.availableGames[0];
+            if (state.availableGames.size() > 0) {
+                const Host &game = state.availableGames[0];
 
-            std::cout
-            << ">> Connecting to first found game ("
-            << game.toString()
-            << ")..."
-            << std::endl;
+                std::cout
+                << ">> Connecting to first found game ("
+                << game.toString()
+                << ")..."
+                << std::endl;
 
-            state.status = CONNECTING;
-            state.game   = std::experimental::optional<Host>(game);
+                state.status = CONNECTING;
+                state.game   = std::experimental::optional<Host>(game);
 
-            JoinGame request(game, state.name, socket.getLocalPort());
+                JoinGame request(game, state.name, socket.getLocalPort());
 
-            send(request);
+                send(request);
+            }
+        } else if (state.status == SYNC) {
+            if (!state.currentlyExpectedPingRequestId) {
+                std::cout << ">> Initiating game clock synchronization..." << std::endl;
+
+                GetCurrentTickRequest request(state.game.value(), state.reserveNextPingRequestId());
+
+                send(request);
+            }
+        } else if (state.status == PLAYING) {
+            state.bufferLocalPlayerInput();
+
+            if (state.shouldSendPlayerInput()) {
+                PlayerInput inputPacket(state.game.value(), state.bufferedControllerStates);
+
+                state.clearBufferedInputs();
+
+                send(inputPacket);
+            }
         }
-    } else if (state.status == SYNC) {
-        if (!state.currentlyExpectedPingRequestId) {
-            std::cout << ">> Initiating game clock synchronization..." << std::endl;
-
-            GetCurrentTickRequest request(state.game.value(), state.reserveNextPingRequestId());
-
-            send(request);
-        }
-    }
+    } catch (PacketWriteError &e) {}
 }

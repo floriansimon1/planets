@@ -7,23 +7,21 @@
 #include "./client/client-state.hpp"
 #include "./core/client-status.hpp"
 #include "./graphics/renderer.hpp"
-#include "./input/controller.hpp"
+#include "./input/gamepad.hpp"
 
 int main(void) {
-    ClientState             state;
-    std::vector<Controller> controllers;
-    ClientCommunicator      communicator;
+    ClientState        state;
+    Gamepad            controller;
+    ClientCommunicator communicator;
 
     sf::RenderWindow window(sf::VideoMode(900, 900), "Planets");
-    Controller       controller(0);
 
     Renderer renderer(window);
 
     state.name = "Paul";
+    state.controllers.push_back(controller);
 
     window.setFramerateLimit(60);
-
-    controllers.push_back(controller);
 
     std::cout << ">> PLANETS (client)" << std::endl;
 
@@ -41,7 +39,7 @@ int main(void) {
             }
         }
 
-        state.world.makeNextFrame(controllers);
+        state.refresh();
 
         renderer.render(state.world);
 

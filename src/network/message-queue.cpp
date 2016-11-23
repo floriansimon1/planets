@@ -1,7 +1,7 @@
 #include "./message-queue.hpp"
 
 void MessageQueue::appendMessages(const std::vector<Message> &newMessages) {
-    for (const auto message : newMessages) {
+    for (const auto message: newMessages) {
         queue.push(message);
     }
 }

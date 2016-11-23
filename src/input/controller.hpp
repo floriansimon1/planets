@@ -5,14 +5,14 @@
 
 // Controller in the "gamepad" sense.
 struct Controller {
-    unsigned int playerIndex;
+    virtual bool accelerateBackward() const { return false; }
+    virtual bool accelerate() const         { return false; }
+    virtual bool turnRight() const          { return false; }
+    virtual bool turnLeft() const           { return false; }
 
-    Controller(unsigned int pi): playerIndex(pi) {}
+    bool anyButtonHeld() const;
 
-    bool accelerateBackward() const;
-    bool accelerate() const;
-    bool turnRight() const;
-    bool turnLeft() const;
+    bool operator!=(const Controller &c) const;
 };
 
 #endif
