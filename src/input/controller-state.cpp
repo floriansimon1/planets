@@ -1,5 +1,8 @@
 #include "./controller-state.hpp"
 
+ControllerState::ControllerState(): ControllerState(0) {
+}
+
 ControllerState::ControllerState(sf::Int32 t, const Controller &controller):
     timestamp(t),
     backward(controller.accelerateBackward()),
@@ -8,6 +11,13 @@ ControllerState::ControllerState(sf::Int32 t, const Controller &controller):
     left(controller.turnLeft()) {
 }
 
-ControllerState ControllerState::operator=(const ControllerState &c) const {
-    return ControllerState(c);
+ControllerState::ControllerState(sf::Int32 t):
+    timestamp(t),
+    backward(false),
+    forward(false),
+    right(false),
+    left(false) {
+}
+
+ControllerState::ControllerState(const ControllerState &state): ControllerState(state.timestamp, state) {
 }

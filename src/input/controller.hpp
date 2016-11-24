@@ -10,8 +10,6 @@ struct Controller {
     virtual bool turnRight() const          { return false; }
     virtual bool turnLeft() const           { return false; }
 
-    bool anyButtonHeld() const;
-
     bool operator!=(const Controller &c) const;
 };
 

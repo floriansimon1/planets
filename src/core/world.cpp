@@ -12,9 +12,7 @@ World::World(): dimensions(300.f, 300.f) {
     players.push_back(player);
 }
 
-void World::makeNextFrame(std::vector<Controller> &controllers) {
-    const auto elapsedTime = frameClock.getElapsedTime();
-
+void World::makeNextFrame(sf::Int32 elapsedTime, const std::vector<ControllerState> &controllers) {
     for (size_t it = 0; it < players.size(); it++) {
         auto &player     = players[it];
         auto &controller = controllers[it];
@@ -40,6 +38,4 @@ void World::makeNextFrame(std::vector<Controller> &controllers) {
             dimensions
         );
     }
-
-    frameClock.restart();
 }

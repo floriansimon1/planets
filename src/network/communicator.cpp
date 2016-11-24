@@ -58,7 +58,11 @@ void Communicator::process(AgentState &state) {
 }
 
 sf::Socket::Status Communicator::send(OutgoingMessage &message) {
-    message.tryPrepare();
+    message.doPrepare();
 
-    return socket.send(message.packet, message.host.address, message.host.port);
+    if (!message.error) {
+        return socket.send(message.packet, message.host.address, message.host.port);
+    } else {
+        return sf::Socket::Error;
+    }
 }

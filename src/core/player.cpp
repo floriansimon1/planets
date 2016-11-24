@@ -5,7 +5,7 @@
 #include "../math/vector2.hpp"
 
 float computeLinearParameterChange(
-    const sf::Time &elapsedTime,
+    sf::Int32 elapsedTime,
     float parameterChangeDeltaPerSecond,
     float current,
     bool decrease,
@@ -22,18 +22,18 @@ float computeLinearParameterChange(
 
     const auto absoluteChange = (
         (parameterChangeDeltaPerSecond / 1000.f)
-        * elapsedTime.asMilliseconds()
+        * elapsedTime
     );
 
     return current + absoluteChange * multiplier;
 }
 
-float Player::computeNewYaw(const sf::Time &elapsedTime, bool turnLeft, bool turnRight) const {
+float Player::computeNewYaw(sf::Int32 elapsedTime, bool turnLeft, bool turnRight) const {
     return computeLinearParameterChange(elapsedTime, yawChangeSpeed, yaw, turnLeft, turnRight);
 }
 
 sf::Vector2f Player::computeNewInertia(
-    const sf::Time &elapsedTime,
+    sf::Int32 elapsedTime,
     bool forward,
     bool backward,
     sf::Vector2f &inertia,
@@ -65,7 +65,7 @@ sf::Vector2f Player::computeNewInertia(
 }
 
 sf::Vector2f Player::computeNewPosition(
-    const sf::Time &elapsedTime,
+    sf::Int32 elapsedTime,
     const sf::Vector2f &position,
     const sf::Vector2f &inertia,
     const sf::Vector2f &worldDimensions

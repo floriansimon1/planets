@@ -1,5 +1,4 @@
 #include <numeric>
-#include <iostream>
 
 #include "./client-state.hpp"
 
@@ -40,30 +39,55 @@ sf::Int32 ClientState::getServerTimestamp() const {
 }
 
 ControllerState ClientState::bufferLocalPlayerInput() {
-    ControllerState currentState(getServerTimestamp(), controllers[0]);
+    std::vector<ControllerState> newStates;
+    ControllerState              currentState;
 
-    if (bufferedControllerStates.size() > 0) {
+    sf::Int32 timestamp = getServerTimestamp();
+
+    if (bufferedControllerStates.empty()) {
+        currentState = ControllerState(timestamp);
+
+        // This buffer will be ignored, so we don't care what it contains.
+        std::for_each(
+            world.players.begin(),
+            world.players.end(),
+
+            [&newStates, &currentState] (const auto &_) {
+                newStates.push_back(currentState);
+            }
+        );
+    } else {
+        currentState = ControllerState(timestamp, gamepad);
+
         const auto &previousControllerStates = bufferedControllerStates[0];
 
         const auto &previousLocalControllerState = previousControllerStates[0];
 
+        /*
+        * Refreshes the controller state of the local player,
+        * duplicates remote player controller states.
+        */
         if (currentState != previousLocalControllerState) {
             std::vector<ControllerState> newStates;
 
-            const auto &oldRemoteControllerStatesBegin = previousControllerStates.begin() + 1;
-            const auto &oldRemoteControllerStatesEnd   = previousControllerStates.end();
-
             newStates.push_back(currentState);
 
-            // Use the old controller states for remote players.
-            newStates.insert(
-                newStates.end(),
-                oldRemoteControllerStatesBegin,
-                oldRemoteControllerStatesEnd
-            );
+            if (previousControllerStates.size() > 1) {
+                const auto oldRemoteControllerStatesBegin = previousControllerStates.begin() + 1;
+                const auto oldRemoteControllerStatesEnd   = previousControllerStates.end();
 
-            bufferedControllerStates.push_back(newStates);
+                newStates.insert(
+                    newStates.end(),
+                    oldRemoteControllerStatesBegin,
+                    oldRemoteControllerStatesEnd
+                );
+            }
         }
+    }
+
+    // If we have a new buffer to append, we do it now.
+    if (newStates.size() > 0) {
+        bufferedControllerStates.push_back(newStates);
     }
 
     return currentState;
@@ -85,14 +109,45 @@ bool ClientState::shouldSendPlayerInput() {
 }
 
 void ClientState::clearBufferedInputs() {
-    // TODO: Implement properly!
-    bufferedControllerStates.clear();
+    // Nothing to clear.
+    if (bufferedControllerStates.empty()) {
+        return;
+    }
+
+    // Keeps the last controller states in memory.
+    bufferedControllerStates = std::deque<std::vector<ControllerState>>(
+        bufferedControllerStates.end() - 1,
+        bufferedControllerStates.end()
+    );
 }
 
 void ClientState::refresh() {
-    for (const auto &controllerStates: bufferedControllerStates) {
-        for (const auto &controller: controllerStates) {
-
-        }
+    if (bufferedControllerStates.size() > 1) {
+        return;
     }
+
+    const auto &firstStatesIterator = bufferedControllerStates.begin();
+
+    const auto &firstStates = *firstStatesIterator;
+
+    sf::Int32 start = firstStates[0].timestamp;
+
+    // We drop one input buffer and start iterating from it.
+    std::for_each(
+        firstStatesIterator + 1,
+        bufferedControllerStates.end(),
+
+        [&start, this] (auto &controllerStates) {
+            sf::Int32 timestamp = controllerStates[0].timestamp;
+
+            // Calculates the elapsed time to advance the simulation.
+            sf::Int32 dt = timestamp - start;
+
+            // Does advance the simulation.
+            world.makeNextFrame(dt, controllerStates);
+
+            // The reference point becomes the timestamp we've just used to compute Δt.
+            start = timestamp;
+        }
+    );
 }

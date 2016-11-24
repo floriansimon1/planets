@@ -27,10 +27,10 @@ struct Player: Entity {
 
     Player(): Entity(150.f, 150.f), inertia(0.f, 0.f), yaw(90.f) {}
 
-    float computeNewYaw(const sf::Time &elapsedTime, bool turnLeft, bool turnRight) const;
+    float computeNewYaw(sf::Int32 elapsedTime, bool turnLeft, bool turnRight) const;
 
     sf::Vector2f computeNewInertia(
-        const sf::Time &elapsedTime,
+        sf::Int32 elapsedTime,
         bool forward,
         bool backward,
         sf::Vector2f &inertia,
@@ -38,7 +38,7 @@ struct Player: Entity {
     ) const;
 
     sf::Vector2f computeNewPosition(
-        const sf::Time &elapsedTime,
+        sf::Int32 elapsedTime,
         const sf::Vector2f &position,
         const sf::Vector2f &inertia,
         const sf::Vector2f &worldDimensions

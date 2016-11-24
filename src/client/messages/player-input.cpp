@@ -7,6 +7,12 @@ PlayerInput::PlayerInput(const Host &h,  const std::deque<std::vector<Controller
 }
 
 void PlayerInput::prepare() {
+    if (inputs.empty()) {
+        error = true;
+
+        return;
+    }
+
     packetWrite(packet, CLIENT_INPUT);
 
     // TODO: Check that size does not exceed max datagram size.

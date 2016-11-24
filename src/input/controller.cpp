@@ -8,9 +8,3 @@ bool Controller::operator!=(const Controller &controller) const {
         && controller.accelerateBackward() == accelerateBackward()
     );
 }
-
-bool Controller::anyButtonHeld() const {
-    return (
-        turnLeft() || turnRight() || accelerate() || accelerateBackward()
-    );
-}

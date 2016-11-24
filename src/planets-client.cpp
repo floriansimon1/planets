@@ -7,11 +7,9 @@
 #include "./client/client-state.hpp"
 #include "./core/client-status.hpp"
 #include "./graphics/renderer.hpp"
-#include "./input/gamepad.hpp"
 
 int main(void) {
     ClientState        state;
-    Gamepad            controller;
     ClientCommunicator communicator;
 
     sf::RenderWindow window(sf::VideoMode(900, 900), "Planets");
@@ -19,7 +17,6 @@ int main(void) {
     Renderer renderer(window);
 
     state.name = "Paul";
-    state.controllers.push_back(controller);
 
     window.setFramerateLimit(60);
 

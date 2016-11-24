@@ -8,20 +8,24 @@
 struct ControllerState: Controller {
     sf::Int32 timestamp;
 
-    const bool backward;
-    const bool forward;
-    const bool right;
-    const bool left;
+    bool backward;
+    bool forward;
+    bool right;
+    bool left;
 
     virtual bool accelerateBackward() const { return backward; }
     virtual bool accelerate() const         { return forward;  }
     virtual bool turnRight() const          { return right;    }
     virtual bool turnLeft() const           { return left;     }
 
-    ControllerState(sf::Int32 t, const Controller &controller);
+    // Creates a state where no button is pressed with the given timestamp.
+    static ControllerState initial(sf::Int32 timestamp);
 
-    // Assignment operator returns a copy so that it can be stored in vectors.
-    ControllerState operator=(const ControllerState &c) const;
+    // Creates a controller state with no held buttons.
+    ControllerState();
+    ControllerState(sf::Int32 timestamp);
+    ControllerState(const ControllerState &state);
+    ControllerState(sf::Int32 t, const Controller &controller);
 };
 
 #endif

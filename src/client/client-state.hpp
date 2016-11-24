@@ -9,9 +9,9 @@
 #include "../core/world.hpp"
 #include "../core/timer.hpp"
 #include "../network/host.hpp"
+#include "../input/gamepad.hpp"
 #include "../network/network.hpp"
 #include "../core/agent-state.hpp"
-#include "../input/controller.hpp"
 #include "../core/client-status.hpp"
 #include "../input/controller-state.hpp"
 
@@ -27,9 +27,9 @@ struct ClientState: AgentState {
     sf::Int32                                serverClockOffset;
     std::vector<sf::Int32>                   latencySamples;
     std::vector<Host>                        availableGames;
-    std::vector<Controller>                  controllers;
     Timer                                    pingTimer;
     std::experimental::optional<sf::Int32>   latency;
+    Gamepad                                  gamepad;
     World                                    world;
     std::experimental::optional<Host>        game;
     std::string                              name;

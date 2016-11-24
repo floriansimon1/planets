@@ -6,11 +6,10 @@
 #include <vector>
 
 #include "./player.hpp"
-#include "../input/controller.hpp"
+#include "../input/controller-state.hpp"
 
 struct World {
     sf::Clock    worldClock;
-    sf::Clock    frameClock;
     sf::Vector2f dimensions;
 
     // The first player in that list is the player controlled locally.
@@ -18,7 +17,7 @@ struct World {
 
     World();
 
-    void makeNextFrame(std::vector<Controller>&);
+    void makeNextFrame(sf::Int32 elapsedTime, const std::vector<ControllerState> &controllers);
 
     private:
         World(World&);

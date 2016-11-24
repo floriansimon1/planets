@@ -5,9 +5,11 @@
 #include "./host.hpp"
 
 struct OutgoingMessage: Message {
+    bool error = false;
+
     OutgoingMessage(const Host &h);
 
-    void tryPrepare();
+    void doPrepare();
 
     protected:
         virtual void prepare() {}
