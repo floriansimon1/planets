@@ -85,15 +85,7 @@ void ClientCommunicator::converse(ClientState &state) {
                 send(request);
             }
         } else if (state.status == PLAYING) {
-            state.bufferLocalPlayerInput();
-
-            if (state.shouldSendPlayerInput()) {
-                PlayerInput inputPacket(state.game.value(), state.bufferedControllerStates);
-
-                state.clearBufferedInputs();
-
-                send(inputPacket);
-            }
+            // TODO: Send input to server.
         }
     } catch (PacketWriteError &e) {}
 }

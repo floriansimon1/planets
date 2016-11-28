@@ -4,6 +4,9 @@
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 
+// In ms.
+#define TICK_DELAY ((sf::Int32) 20)
+
 struct SocketBindError {};
 struct PacketReadError {};
 struct PacketWriteError {};
@@ -21,7 +24,7 @@ struct PacketWriteError {};
 #define preparePlanetsPacket(packet) packetWrite(packet, "PLANETS")
 
 // An ID number that can be sent over the wire safely via packet stream operations.
-typedef sf::Uint16 Id;
+typedef sf::Uint64 Id;
 
 void bindToAnyAvailablePort(sf::UdpSocket &s);
 

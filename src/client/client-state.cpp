@@ -38,98 +38,40 @@ sf::Int32 ClientState::getServerTimestamp() const {
     return world.worldClock.getElapsedTime().asMilliseconds() + serverClockOffset;
 }
 
-ControllerState ClientState::bufferLocalPlayerInput() {
-    std::vector<ControllerState> newStates;
-    ControllerState              currentState;
-
-    sf::Int32 timestamp = getServerTimestamp();
-
-    if (bufferedControllerStates.empty()) {
-        currentState = ControllerState(timestamp);
-
-        // This buffer will be ignored, so we don't care what it contains.
-        std::for_each(
-            world.players.begin(),
-            world.players.end(),
-
-            [&newStates, &currentState] (const auto &_) {
-                newStates.push_back(currentState);
-            }
-        );
-    } else {
-        currentState = ControllerState(timestamp, gamepad);
-
-        const auto &previousControllerStates = bufferedControllerStates[0];
-
-        const auto &previousLocalControllerState = previousControllerStates[0];
-
-        /*
-        * Refreshes the controller state of the local player,
-        * duplicates remote player controller states.
-        */
-        if (currentState != previousLocalControllerState) {
-            std::vector<ControllerState> newStates;
-
-            newStates.push_back(currentState);
-
-            if (previousControllerStates.size() > 1) {
-                const auto oldRemoteControllerStatesBegin = previousControllerStates.begin() + 1;
-                const auto oldRemoteControllerStatesEnd   = previousControllerStates.end();
-
-                newStates.insert(
-                    newStates.end(),
-                    oldRemoteControllerStatesBegin,
-                    oldRemoteControllerStatesEnd
-                );
-            }
-        }
+void ClientState::compute() {
+    if (status != PLAYING) {
+        return;
     }
 
-    // If we have a new buffer to append, we do it now.
-    if (newStates.size() > 0) {
-        bufferedControllerStates.push_back(newStates);
-    }
-
-    return currentState;
-}
-
-bool ClientState::shouldSendPlayerInput() {
     const auto timestamp = getServerTimestamp();
 
-    const auto difference = timestamp - lastInputSend;
+    inputHistory.bufferLocalPlayerInput(timestamp);
 
-    // Advance the last send input by as many ticks as needed, and returns true.
-    if (difference >= tickDelay) {
-        lastInputSend += ((sf::Int32) difference / tickDelay) * tickDelay;
-
-        return true;
-    } else {
-        return false;
-    }
-}
-
-void ClientState::clearBufferedInputs() {
-    // Nothing to clear.
-    if (bufferedControllerStates.empty()) {
-        return;
-    }
-
-    // Keeps the last controller states in memory.
-    bufferedControllerStates = std::deque<std::vector<ControllerState>>(
-        bufferedControllerStates.end() - 1,
-        bufferedControllerStates.end()
+    const auto &firstStatesIterator = (
+        inputHistory.history.begin()
+        + inputHistory.nextDisplayBufferIterator()
     );
-}
-
-void ClientState::refresh() {
-    if (bufferedControllerStates.size() > 1) {
-        return;
-    }
-
-    const auto &firstStatesIterator = bufferedControllerStates.begin();
 
     const auto &firstStates = *firstStatesIterator;
 
+    std::accumulate(
+        firstStatesIterator + 1,
+        inputHistory.history.end(),
+        firtStates[0].timestamp
+
+        [this] (auto start, auto &states) {
+            sf::Int32 timestamp = states[0].timestamp;
+
+            // Calculates the elapsed time to advance the simulation.
+            sf::Int32 dt = timestamp - start;
+
+            // Does advance the simulation.
+            world.makeNextFrame(dt, states);
+
+            // The next start point is the timestamp we've just used to compute Δt.
+            return states[0].timestamp;
+        }
+    );
     sf::Int32 start = firstStates[0].timestamp;
 
     // We drop one input buffer and start iterating from it.

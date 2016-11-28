@@ -18,7 +18,7 @@ int main(void) {
 
     state.name = "Paul";
 
-    window.setFramerateLimit(60);
+    window.setFramerateLimit(200);
 
     std::cout << ">> PLANETS (client)" << std::endl;
 
@@ -36,7 +36,7 @@ int main(void) {
             }
         }
 
-        state.refresh();
+        state.compute();
 
         renderer.render(state.world);
 

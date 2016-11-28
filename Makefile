@@ -11,6 +11,7 @@ client:
         src/planets-client.cpp \
         src/client/handlers/*.cpp \
         src/client/messages/*.cpp \
+        -g \
         -o ./bin/planets \
         -lsfml-graphics -lsfml-system -lsfml-window -lsfml-network \
 
