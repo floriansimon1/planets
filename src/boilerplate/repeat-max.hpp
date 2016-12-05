@@ -6,7 +6,6 @@
 
 struct InterruptRepeatMaxException {};
 
-// If the return value of the iteratee is true, then the repetition is stopped.
 template <typename OutputType>
 std::vector<OutputType>
 repeatMax(unsigned int max, const std::function<OutputType()> &iteratee) {

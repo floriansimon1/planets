@@ -38,7 +38,10 @@ struct ClientState: AgentState {
     void averageLatency();
 
     // Advances the game simulation.
-    void compute();
+    void process();
+
+    private:
+        void processInputHistory(Id from);
 };
 
 #endif

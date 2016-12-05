@@ -36,7 +36,7 @@ int main(void) {
             }
         }
 
-        state.compute();
+        state.process();
 
         renderer.render(state.world);
 

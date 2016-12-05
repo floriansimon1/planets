@@ -38,26 +38,15 @@ sf::Int32 ClientState::getServerTimestamp() const {
     return world.worldClock.getElapsedTime().asMilliseconds() + serverClockOffset;
 }
 
-void ClientState::compute() {
-    if (status != PLAYING) {
-        return;
-    }
+void ClientState::processInputHistory(Id from) {
+    const auto &lastDisplayedIterator = inputHistory.getStateIterator(inputHistory.lastDisplayed);
 
-    const auto timestamp = getServerTimestamp();
-
-    inputHistory.bufferLocalPlayerInput(timestamp);
-
-    const auto &firstStatesIterator = (
-        inputHistory.history.begin()
-        + inputHistory.nextDisplayBufferIterator()
-    );
-
-    const auto &firstStates = *firstStatesIterator;
+    const auto &lastDisplayed = *lastDisplayedIterator;
 
     std::accumulate(
-        firstStatesIterator + 1,
+        lastDisplayedIterator + 1,
         inputHistory.history.end(),
-        firtStates[0].timestamp
+        lastDisplayed[0].timestamp,
 
         [this] (auto start, auto &states) {
             sf::Int32 timestamp = states[0].timestamp;
@@ -72,24 +61,18 @@ void ClientState::compute() {
             return states[0].timestamp;
         }
     );
-    sf::Int32 start = firstStates[0].timestamp;
+}
 
-    // We drop one input buffer and start iterating from it.
-    std::for_each(
-        firstStatesIterator + 1,
-        bufferedControllerStates.end(),
+void ClientState::process() {
+    if (status != PLAYING) {
+        return;
+    }
 
-        [&start, this] (auto &controllerStates) {
-            sf::Int32 timestamp = controllerStates[0].timestamp;
+    const auto timestamp = getServerTimestamp();
 
-            // Calculates the elapsed time to advance the simulation.
-            sf::Int32 dt = timestamp - start;
+    inputHistory.bufferLocalPlayerInput(timestamp);
 
-            // Does advance the simulation.
-            world.makeNextFrame(dt, controllerStates);
+    processInputHistory(inputHistory.lastDisplayed);
 
-            // The reference point becomes the timestamp we've just used to compute Δt.
-            start = timestamp;
-        }
-    );
+    inputHistory.historyDisplayed();
 }

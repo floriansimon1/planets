@@ -31,6 +31,8 @@ void PongHandler::handle(Communicator &communicator, Message &message, AgentStat
             state.serverClockOffset = serverClockOffset;
             state.status            = PLAYING;
 
+            state.inputHistory.startBuffering(state.getServerTimestamp(), 0);
+
             std::cout
             << ">> Average latency: " << state.latency.value() << " ms\n"
             << ">> Clock offset: " << serverClockOffset << " ms"

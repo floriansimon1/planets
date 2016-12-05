@@ -1,8 +1,30 @@
 #include "./input-history.hpp"
 #include "../boilerplate/drop.hpp"
+#include "../boilerplate/repeat-n.hpp"
 
-void InputHistory::startBuffering(sf::Int32 timestamp) {
-    lastDisplayedStates.push_back(ControllerState(timestamp, gamepad));
+// Implementation note: we should always have at least two entries in the history.
+
+void InputHistory::startBuffering(sf::Int32 timestamp, size_t nbRemotePlayers) {
+    lastSentTime  = timestamp;
+    lastDisplayed = 0;
+    lastAcked     = 0;
+    lastSent      = 0;
+
+    std::vector<ControllerState> initial;
+
+    if (!history.size()) {
+        initial.push_back(ControllerState(timestamp, gamepad));
+
+        ControllerState remotePlayersInitialState(timestamp);
+
+        repeatN(nbRemotePlayers, [&remotePlayersInitialState, &initial] () {
+            initial.push_back(remotePlayersInitialState);
+        });
+    } else {
+        initial = history.back();
+    }
+
+    history.push_back(initial);
 }
 
 void InputHistory::bufferLocalPlayerInput(sf::Int32 timestamp)  {
@@ -13,22 +35,20 @@ void InputHistory::bufferLocalPlayerInput(sf::Int32 timestamp)  {
     // Refreshes the controller state of the local player,
     newStates.push_back(currentState);
 
-    const lastPlay
-        /*
-        * Until we receive the actual remote player input from the server,
-        * we assume that it remains unchanged. But we do so only if there
-        * any actual remote players.
-        */
-        if (previousControllerStates.size() > 1) {
-            const auto oldRemoteControllerStatesBegin = previousControllerStates.begin() + 1;
-            const auto oldRemoteControllerStatesEnd   = previousControllerStates.end();
+    /*
+    * Until we receive the actual remote player input from the server,
+    * we assume that it remains unchanged. But we do so only if there
+    * any actual remote players.
+    */
+    if (history.back().size() > 1) {
+        const auto oldRemoteControllerStatesBegin = history.back().begin() + 1;
+        const auto oldRemoteControllerStatesEnd   = history.back().end();
 
-            newStates.insert(
-                newStates.end(),
-                oldRemoteControllerStatesBegin,
-                oldRemoteControllerStatesEnd
-            );
-        }
+        newStates.insert(
+            newStates.end(),
+            oldRemoteControllerStatesBegin,
+            oldRemoteControllerStatesEnd
+        );
     }
 
     if (newStates.size() > 0) {
@@ -36,27 +56,36 @@ void InputHistory::bufferLocalPlayerInput(sf::Int32 timestamp)  {
     }
 }
 
-size_t InputHistory::nextDisplayBufferIterator() {
-    const auto lastDisplayed = lastDisplayedStates.size() + 1;
-
-    lastDisplayedStates = *history.end();
-
-    return lastDisplayed;
+const std::vector<ControllerState>& InputHistory::operator[](Id stateId) {
+    return *getStateIterator(stateId);
 }
 
 bool InputHistory::shouldSendPlayerInput(sf::Int32 timestamp) {
-    const auto difference = timestamp - lastInputSend;
+    const auto difference = timestamp - history[lastSent][0].timestamp;
 
     // Advance the last send input by as many ticks as needed, and returns true.
     if (difference >= TICK_DELAY) {
-        lastInputSend += ((sf::Int32) difference / TICK_DELAY) * TICK_DELAY;
-
         return true;
     } else {
         return false;
     }
 }
 
-void InputHistory::ackInputHistory(Id stateId) {
-    drop(history, stateId - lastAckedInputState);
+std::deque<std::vector<ControllerState>>::iterator InputHistory::getStateIterator(Id stateId) {
+    return history.begin() + (stateId - lastAcked);
+}
+
+void InputHistory::historyDisplayed() {
+    lastDisplayed = history.size() - 1;
+}
+
+void InputHistory::historySent(sf::Int32 timestamp) {
+    lastSentTime = timestamp;
+    lastSent     = history.size();
+}
+
+void InputHistory::ackInputHistory(Id ackedId) {
+    drop(history, ackedId - lastAcked);
+
+    lastAcked = ackedId;
 }
