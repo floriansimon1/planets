@@ -1,12 +1,10 @@
 #include <iostream>
 
-#include "../client-state.hpp"
 #include "../../network/network.hpp"
-#include "../../core/client-status.hpp"
 #include "./connection-response-handler.hpp"
 
-void ConnectionResponseHandler::handle(Communicator &communicator, Message &message, AgentState &state) const {
-    ClientState &clientState = (ClientState&) state;
+void ConnectionResponseHandler::handle(ClientApplication &application, Message &message) const {
+    const auto &currentStep = application.getCurrentStep();
 
     bool authorized;
 
@@ -15,10 +13,10 @@ void ConnectionResponseHandler::handle(Communicator &communicator, Message &mess
     if (authorized) {
         std::cout << ">> Request to join game granted" << std::endl;
 
-        clientState.status = SYNC;
+        currentStep.onConnection(application);
     } else {
         std::cout << ">> Request to join game denied" << std::endl;
 
-        clientState.status = SEARCHING;
+        currentStep.onConnectionRefused(application);
     }
 }

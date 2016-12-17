@@ -7,7 +7,7 @@
 #include "../../network/message.hpp"
 
 struct PongHandler: MessageHandler {
-    virtual void handle(Communicator &communicator, Message &message, AgentState &state) const;
+    virtual void handle(ClientApplication &application, Message &message) const;
 };
 
 #endif

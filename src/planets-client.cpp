@@ -3,26 +3,23 @@
 #include <unistd.h>
 #include <SFML/Graphics.hpp>
 
-#include "./client/client-communicator.hpp"
-#include "./client/client-state.hpp"
-#include "./core/client-status.hpp"
+#include "./client/client-application.hpp"
 #include "./graphics/renderer.hpp"
 
 int main(void) {
-    ClientState        state;
-    ClientCommunicator communicator;
+    ClientApplication application;
 
     sf::RenderWindow window(sf::VideoMode(900, 900), "Planets");
 
     Renderer renderer(window);
 
-    state.name = "Paul";
+    application.localPlayerName = "Paul";
 
     window.setFramerateLimit(200);
 
     std::cout << ">> PLANETS (client)" << std::endl;
 
-    while (state.status != EXIT && window.isOpen()) {
+    while (!application.shouldExit() && window.isOpen()) {
         sf::Event event;
 
         while (window.pollEvent(event)) {
@@ -36,11 +33,9 @@ int main(void) {
             }
         }
 
-        state.process();
+        application.process();
 
         renderer.render(state.world);
-
-        communicator.converse(state);
     }
 
     return EXIT_SUCCESS;

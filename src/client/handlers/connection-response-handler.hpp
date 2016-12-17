@@ -1,10 +1,10 @@
 #ifndef CONNECTION_RESPONSE_HANDLER_HPP
 #define CONNECTION_RESPONSE_HANDLER_HPP
 
-#include "../../network/message-handler.hpp"
+#include "./client-message-handler.hpp"
 
-struct ConnectionResponseHandler: MessageHandler {
-    virtual void handle(Communicator &communicator, Message &message, AgentState &state) const;
+struct ConnectionResponseHandler: ClientMessageHandler {
+    virtual void handle(ClientApplication &application, Message &message) const;
 };
 
 #endif

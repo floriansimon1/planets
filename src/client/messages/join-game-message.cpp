@@ -1,14 +1,14 @@
-#include "./join-game.hpp"
+#include "./join-game-message.hpp"
 #include "../../network/network.hpp"
 #include "../../network/message-types.hpp"
 
-JoinGame::JoinGame(const Host &h, const std::string &n, unsigned short p):
+JoinGameMessage::JoinGameMessage(const Host &h, const std::string &n, unsigned short p):
     OutgoingMessage(h),
     localPort(p),
-    name(n)
-{}
+    name(n) {
+}
 
-void JoinGame::prepare() {
+void JoinGameMessage::prepare() {
     packetWrite(packet, CONNECTION_REQUEST);
     packetWrite(packet, localPort);
     packetWrite(packet, name);

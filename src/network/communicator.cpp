@@ -44,7 +44,7 @@ void Communicator::processNextMessagesBatch(AgentState &state, unsigned int batc
             packetRead(message.packet, type);
 
             if (messageHandlers.count(type)) {
-                messageHandlers[type]->handle(*this, message, state);
+                messageHandlers[type]->handle(application, message);
             }
         } catch (PacketReadError&) {}
     }

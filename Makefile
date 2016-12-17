@@ -9,6 +9,7 @@ client:
         src/network/*.cpp \
         src/graphics/*.cpp \
         src/planets-client.cpp \
+		src/client/states/*.cpp \
         src/client/handlers/*.cpp \
         src/client/messages/*.cpp \
         -g \

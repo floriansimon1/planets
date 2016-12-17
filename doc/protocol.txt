@@ -1,9 +1,0 @@
-Announcements:
-    "PLANETS"
-    gamePort:             sf::Uint16
-    currentPlayersNumber: sf::Uint8
-    maxPlayers:           sf::Uint8
-
-Join request:
-    "PLANETS"
-    name: char*

@@ -20,6 +20,7 @@ struct Communicator {
     void process(AgentState &state);
 
     Communicator(const std::map<MessageType, std::shared_ptr<MessageHandler>> handlers): messageHandlers(handlers) {}
+    virtual ~Communicator() {}
 
     private:
         std::vector<Message> readNextMessagesBatch(unsigned int batchSize);
