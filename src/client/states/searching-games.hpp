@@ -9,7 +9,7 @@
 struct SearchingGames: ClientState {
     std::vector<Host> availableGames;
 
-    virtual void doProcess(Communicator &communicator);
+    virtual void doProcess(ClientApplication &application);
     void updateAvailableGamesList(ClientCommunicator &communicator);
 };
 

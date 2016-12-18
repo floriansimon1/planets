@@ -1,10 +1,11 @@
 #include <iostream>
 
 #include "../../network/network.hpp"
+#include "../states/client-state.hpp"
 #include "./connection-response-handler.hpp"
 
-void ConnectionResponseHandler::handle(ClientApplication &application, Message &message) const {
-    const auto &currentStep = application.getCurrentStep();
+void ConnectionResponseHandler::doHandle(ClientApplication &application, Message &message) const {
+    auto &currentStep = dynamic_cast<ClientState&>(application.getCurrentStep());
 
     bool authorized;
 

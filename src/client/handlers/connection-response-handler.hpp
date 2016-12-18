@@ -4,7 +4,7 @@
 #include "./client-message-handler.hpp"
 
 struct ConnectionResponseHandler: ClientMessageHandler {
-    virtual void handle(ClientApplication &application, Message &message) const;
+    virtual void doHandle(ClientApplication &application, Message &message) const;
 };
 
 #endif

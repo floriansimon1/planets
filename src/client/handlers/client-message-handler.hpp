@@ -2,7 +2,7 @@
 #define CLIENT_MESSAGE_HANDLER_HPP
 
 #include "../../network/message.hpp"
-#include "../../core/application.hpp"
+#include "../client-application.hpp"
 #include "../../network/message-handler.hpp"
 
 struct ClientMessageHandler: MessageHandler {

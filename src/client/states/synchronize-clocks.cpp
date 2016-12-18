@@ -42,7 +42,7 @@ void SynchronizeClocks::onPong(ClientApplication &application, Id pongId, sf::In
             << ">> Clock offset: " << serverClockOffset << " ms"
             << std::endl;
 
-            application.replaceCurrentStep(Play(*this));
+            application.replaceCurrentStep(std::shared_ptr<Play>(new Play(*this)));
         } else {
             GetCurrentTickRequest request(game, reserveNextPingRequestId());
 

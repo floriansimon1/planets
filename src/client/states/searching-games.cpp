@@ -1,10 +1,12 @@
 #include <algorithm>
 #include <iostream>
+#include <memory>
 
 #include "../../boilerplate/remove-in.hpp"
 #include "./searching-games.hpp"
+#include "./join-game.hpp"
 
-void SearchingGames::updateAvailableGamesList(ClientCommunicator &application) {
+void SearchingGames::updateAvailableGamesList(ClientCommunicator &communicator) {
     std::string    header;
     sf::Packet     packet;
     Host           game;
@@ -31,7 +33,7 @@ void SearchingGames::updateAvailableGamesList(ClientCommunicator &application) {
 }
 
 void SearchingGames::doProcess(ClientApplication &application) {
-    updateAvailableGamesList(dynamic_cast<ClientCommunicator>(application.communicator));
+    updateAvailableGamesList(application.clientCommunicator);
 
     if (availableGames.size() > 0) {
         const Host &game = availableGames.front();
@@ -42,6 +44,6 @@ void SearchingGames::doProcess(ClientApplication &application) {
         << ")..."
         << std::endl;
 
-        application.addStep(JoinGame(game));
+        application.addStep(std::shared_ptr<State>(new JoinGame(game)));
     }
 }

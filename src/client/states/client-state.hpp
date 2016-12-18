@@ -2,6 +2,7 @@
 #define CLIENT_STATE_HPP
 
 #include "../../core/state.hpp"
+#include "../../network/network.hpp"
 #include "../client-application.hpp"
 
 struct ClientState: State {
