@@ -7,7 +7,7 @@ void Application::finishStep() {
     stepStack.pop();
 }
 
-bool Application::shouldExit() {
+bool Application::shouldExit() const {
     return stepStack.empty();
 }
 
@@ -22,13 +22,11 @@ void Application::replaceCurrentStep(std::shared_ptr<State> step) {
 }
 
 void Application::run() {
-    auto &step = getCurrentStep();
-
     communicator.communicate(*this);
 
-    step.process(*this);
+    getCurrentStep()->process(*this);
 }
 
-State &Application::getCurrentStep() {
-    return *stepStack.top();
+std::shared_ptr<State> Application::getCurrentStep() const {
+    return stepStack.top();
 }

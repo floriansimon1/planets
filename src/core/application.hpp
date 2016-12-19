@@ -14,9 +14,9 @@ struct Application {
 
     void run();
     void finishStep();
-    bool shouldExit();
-    State &getCurrentStep();
+    bool shouldExit() const;
     void addStep(std::shared_ptr<State> step);
+    std::shared_ptr<State> getCurrentStep() const;
     void replaceCurrentStep(std::shared_ptr<State> step);
 
     protected:

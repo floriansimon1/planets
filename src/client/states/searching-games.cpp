@@ -44,6 +44,6 @@ void SearchingGames::doProcess(ClientApplication &application) {
         << ")..."
         << std::endl;
 
-        application.addStep(std::shared_ptr<State>(new JoinGame(game)));
+        application.addStep(std::make_shared<JoinGame>(game));
     }
 }

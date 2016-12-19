@@ -9,7 +9,7 @@ bool Host::operator==(const Host &g) const {
 std::string Host::toString() const {
     std::ostringstream builder;
 
-    builder << address << ", " << port;
+    builder << address << ':' << port;
 
     return builder.str();
 }

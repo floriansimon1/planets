@@ -4,12 +4,12 @@
 #include <SFML/Graphics.hpp>
 
 #include "./world-space.hpp"
-#include "../core/world.hpp"
+#include "../client/client-application.hpp"
 
 struct Renderer {
     Renderer(sf::RenderWindow &window);
 
-    void render(const World&) const;
+    void render(const ClientApplication &application) const;
 
     private:
         sf::RenderWindow &window;

@@ -5,7 +5,7 @@
 #include "../messages/join-game-message.hpp"
 
 #define assertConnectionResponseExpectedOrReturn(step) \
-    if (!(step).isConnectionState()) { \
+    if (!(static_cast<const ClientState&>(step)).isConnectionState()) { \
         std::cout \
         << ">> ERROR: connection response received for a request we did not make" \
         << std::endl; \
@@ -13,35 +13,39 @@
         return; \
     }
 
-JoinGame::JoinGame(Host &g): game(g) {
+JoinGame::JoinGame(const Host &g): game(g) {
 }
 
 void JoinGame::doProcess(ClientApplication &application) {
     // We must send the join request only once.
     if (requestSent) return;
 
-    JoinGameMessage request(game, application.localPlayerName, communicator.socket.getLocalPort());
+    JoinGameMessage request(
+        game,
+        application.localPlayerName,
+        application.communicator.socket.getLocalPort()
+    );
 
     application.communicator.send(request);
 
     requestSent = true;
 }
 
-bool JoinGame::isConnectionState() {
+bool JoinGame::isConnectionState() const {
     return true;
 }
 
 void JoinGame::onConnection(ClientApplication &application) {
-    const auto &currentStep = application.getCurrentStep();
+    const auto &currentStep = *application.getCurrentStep();
 
     assertConnectionResponseExpectedOrReturn(currentStep);
 
     // Time to synchronize clocks!
-    application.replaceCurrentStep(SynchronizeClocks(game));
+    application.replaceCurrentStep(std::make_shared<SynchronizeClocks>(game));
 }
 
 void JoinGame::onConnectionRefused(ClientApplication &application) {
-    const auto &currentStep = application.getCurrentStep();
+    const auto &currentStep = *application.getCurrentStep();
 
     assertConnectionResponseExpectedOrReturn(currentStep);
 

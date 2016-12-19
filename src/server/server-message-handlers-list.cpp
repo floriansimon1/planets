@@ -6,9 +6,9 @@
 std::map<MessageType, std::shared_ptr<MessageHandler>> serverHandlers() {
     std::map<MessageType, std::shared_ptr<MessageHandler>> handlers;
 
-    handlers[CLIENT_INPUT]       = std::shared_ptr<MessageHandler>(new ClientInputHandler());
-    handlers[PING]               = std::shared_ptr<MessageHandler>(new GetCurrentTickHandler());
-    handlers[CONNECTION_REQUEST] = std::shared_ptr<MessageHandler>(new ConnectionRequestHandler());
+    handlers[CLIENT_INPUT]       = std::make_shared<ClientInputHandler>();
+    handlers[PING]               = std::make_shared<GetCurrentTickHandler>();
+    handlers[CONNECTION_REQUEST] = std::make_shared<ConnectionRequestHandler>();
 
     return handlers;
 }

@@ -9,7 +9,6 @@
 #include "./message-types.hpp"
 #include "./message-handler.hpp"
 #include "./outgoing-message.hpp"
-#include "../core/application.hpp"
 
 struct Communicator {
     std::map<MessageType, std::shared_ptr<MessageHandler>> messageHandlers;

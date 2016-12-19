@@ -10,14 +10,14 @@ struct JoinGame: ClientState {
 
     Host game;
 
-    JoinGame(Host &game);
+    JoinGame(const Host &game);
 
     virtual void doProcess(ClientApplication &application);
 
     virtual void onConnection(ClientApplication &application);
     virtual void onConnectionRefused(ClientApplication &application);
 
-    virtual bool isConnectionState();
+    virtual bool isConnectionState() const;
 };
 
 #endif

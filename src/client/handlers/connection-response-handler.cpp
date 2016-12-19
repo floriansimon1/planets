@@ -5,7 +5,7 @@
 #include "./connection-response-handler.hpp"
 
 void ConnectionResponseHandler::doHandle(ClientApplication &application, Message &message) const {
-    auto &currentStep = dynamic_cast<ClientState&>(application.getCurrentStep());
+    auto &currentStep = static_cast<ClientState&>(*application.getCurrentStep());
 
     bool authorized;
 

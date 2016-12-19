@@ -2,6 +2,16 @@
 
 #include "./play.hpp"
 
+Play::Play(const Host &g, sf::Int32 l, sf::Int32 o):
+    serverClockOffset(o),
+    latency(l),
+    game(g)
+{
+    world.worldClock.restart();
+
+    inputHistory.startBuffering(getServerTimestamp(), 0);
+}
+
 sf::Int32 Play::getServerTimestamp() const {
     return world.worldClock.getElapsedTime().asMilliseconds() + serverClockOffset;
 }
@@ -31,8 +41,8 @@ void Play::processInputHistory(Id from) {
     );
 }
 
-Play::Play(SynchronizeClocks &state) {
-
+bool Play::isGameState() const {
+    return true;
 }
 
 void Play::doProcess(ClientApplication &application) {

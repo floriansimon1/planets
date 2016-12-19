@@ -4,7 +4,6 @@
 #include <SFML/System.hpp>
 #include <deque>
 
-#include "../client-state.hpp"
 #include "../../input/controller-state.hpp"
 #include "../../network/outgoing-message.hpp"
 

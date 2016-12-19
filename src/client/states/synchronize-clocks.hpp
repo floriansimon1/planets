@@ -6,22 +6,21 @@
 #include <experimental/optional>
 
 #include "./client-state.hpp"
-#include "../network/network.hpp"
+#include "../../core/timer.hpp"
 #include "../client-application.hpp"
+#include "../../network/network.hpp"
 
 struct SynchronizeClocks: ClientState {
-    std::experimental::optional<Id>        currentlyExpectedPingRequestId;
-    sf::Int32                              serverClockOffset;
-    std::vector<sf::Int32>                 latencySamples;
-    Timer                                  pingTimer;
-    std::experimental::optional<sf::Int32> latency;
-    Host                                   game;
+    std::experimental::optional<Id> currentlyExpectedPingRequestId;
+    std::vector<sf::Int32>          latencySamples;
+    Timer                           pingTimer;
+    Host                            game;
 
-    SynchronizeClocks(Host &game);
+    SynchronizeClocks(const Host &game);
 
     Id reserveNextPingRequestId();
     bool pushLatencySamples();
-    void averageLatency();
+    sf::Int32 averageLatency();
 
     virtual void doProcess(ClientApplication &application);
     virtual void onPong(ClientApplication &application, Id pongId, sf::Int32 serverClockOffset);

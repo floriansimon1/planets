@@ -1,5 +1,5 @@
 #include "./renderer.hpp"
-#include "./world-space.hpp"
+#include "../client/states/play.hpp"
 
 #include <algorithm>
 
@@ -11,7 +11,15 @@ Renderer::Renderer(sf::RenderWindow &w): window(w) {
     window.setFramerateLimit(60);
 }
 
-void Renderer::render(const World &world) const {
+void Renderer::render(const ClientApplication &application) const {
+    const auto &currentStep = static_cast<const ClientState&>(*application.getCurrentStep());
+
+    if (!currentStep.isGameState()) {
+        return;
+    }
+
+    const auto &world = static_cast<const Play&>(currentStep).world;
+
     const WorldSpace minimap(world.dimensions * 2.f);
 
     sf::View minimapView(sf::FloatRect(

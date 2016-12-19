@@ -33,9 +33,9 @@ int main(void) {
             }
         }
 
-        application.process();
+        application.run();
 
-        renderer.render(state.world);
+        renderer.render(application);
     }
 
     return EXIT_SUCCESS;

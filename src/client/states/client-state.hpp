@@ -17,7 +17,8 @@ struct ClientState: State {
     virtual void onPong(ClientApplication &application, Id pongId, sf::Int32 serverClockOffset) {}
 
     // Identification methods.
-    virtual bool isConnectionState();
+    virtual bool isGameState() const;
+    virtual bool isConnectionState() const;
 };
 
 #endif

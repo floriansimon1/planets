@@ -1,10 +1,11 @@
 #include <iostream>
+#include <numeric>
 
 #include "./play.hpp"
 #include "./synchronize-clocks.hpp"
 #include "../messages/get-current-tick-request.hpp"
 
-SynchronizeClocks::SynchronizeClocks(Host &g): game(g) {
+SynchronizeClocks::SynchronizeClocks(const Host &g): game(g) {
 }
 
 bool SynchronizeClocks::enoughLatencySamples() {
@@ -15,7 +16,7 @@ void SynchronizeClocks::doProcess(ClientApplication &application) {
     if (!currentlyExpectedPingRequestId) {
         std::cout << ">> Initiating game clock synchronization..." << std::endl;
 
-        GetCurrentTickRequest request(game.value(), reserveNextPingRequestId());
+        GetCurrentTickRequest request(game, reserveNextPingRequestId());
 
         application.communicator.send(request);
     }
@@ -32,17 +33,14 @@ void SynchronizeClocks::onPong(ClientApplication &application, Id pongId, sf::In
 
             averageLatency();
 
-            //state.world.worldClock.restart();
-            //state.inputHistory.startBuffering(state.getServerTimestamp(), 0);
-
-            serverClockOffset = clockOffset;
-
             std::cout
-            << ">> Average latency: " << latency.value() << " ms\n"
-            << ">> Clock offset: " << serverClockOffset << " ms"
+            << ">> Average latency: " << latency << " ms\n"
+            << ">> Clock offset: " << clockOffset << " ms"
             << std::endl;
 
-            application.replaceCurrentStep(std::shared_ptr<Play>(new Play(*this)));
+            application.replaceCurrentStep(std::make_shared<Play>(
+                game, clockOffset, latency
+            ));
         } else {
             GetCurrentTickRequest request(game, reserveNextPingRequestId());
 
@@ -67,7 +65,7 @@ Id SynchronizeClocks::reserveNextPingRequestId() {
     return value;
 }
 
-void SynchronizeClocks::averageLatency() {
+sf::Int32 SynchronizeClocks::averageLatency() {
     sf::Int32 sum = std::accumulate(
         latencySamples.begin(),
         latencySamples.end(),
@@ -86,5 +84,5 @@ void SynchronizeClocks::averageLatency() {
     // Set the first sample to the averaged value calculated above.
     latencySamples[0] = average;
 
-    latency.emplace(average);
+    return average;
 }

@@ -12,8 +12,10 @@
 #include "../../input/controller-state.hpp"
 
 struct Play: ClientState {
+    sf::Int32    serverClockOffset;
     InputHistory inputHistory;
     World        serverWorld;
+    sf::Int32    latency;
     Gamepad      gamepad;
     World        world;
     Host         game;
@@ -21,9 +23,10 @@ struct Play: ClientState {
 
     sf::Int32 getServerTimestamp() const;
 
-    Play(SynchronizeClocks &state);
+    Play(const Host &game, sf::Int32 latency, sf::Int32 serverClockOffset);
 
     virtual void doProcess(ClientApplication &application);
+    virtual bool isGameState() const;
 
     private:
         void processInputHistory(Id from);
