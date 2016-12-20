@@ -2,8 +2,10 @@
 #include "../../network/network.hpp"
 #include "../../network/message-types.hpp"
 
-PlayerInput::PlayerInput(const Host &h,  const std::deque<std::vector<ControllerState>> &i):
-    OutgoingMessage(h), inputs(i) {
+PlayerInput::PlayerInput(const Host &h,  const std::vector<ControllerState> &i):
+    OutgoingMessage(h),
+    inputs(i)
+{
 }
 
 void PlayerInput::prepare() {
@@ -13,17 +15,14 @@ void PlayerInput::prepare() {
         return;
     }
 
-    packetWrite(packet, CLIENT_INPUT);
+    packetTypeWrite(packet, MessageType::ClientInput);
 
-    // TODO: Check that size does not exceed max datagram size.
-    for (auto &controllers: inputs) {
-        // We only need to send the input of the local player.
-        const auto &controller = controllers[0];
-
-        packetWrite(packet, controller.timestamp);
-        packetWrite(packet, controller.turnLeft());
-        packetWrite(packet, controller.turnRight());
-        packetWrite(packet, controller.accelerate());
-        packetWrite(packet, controller.accelerateBackward());
+    // TODO: Check that packet size does not exceed max datagram size.
+    for (const auto &state: inputs) {
+        packetWrite(packet, state.timestamp);
+        packetWrite(packet, state.turnLeft());
+        packetWrite(packet, state.turnRight());
+        packetWrite(packet, state.accelerate());
+        packetWrite(packet, state.accelerateBackward());
     }
 }

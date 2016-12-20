@@ -1,5 +1,8 @@
 #include <numeric>
+#include <algorithm>
 
+#include "../../boilerplate/remove-in.hpp"
+#include "../messages/player-input.hpp"
 #include "./play.hpp"
 
 Play::Play(const Host &g, sf::Int32 l, sf::Int32 o):
@@ -53,4 +56,34 @@ void Play::doProcess(ClientApplication &application) {
     processInputHistory(inputHistory.lastDisplayed);
 
     inputHistory.historyDisplayed();
+
+    if (inputHistory.shouldFlush(timestamp)) {
+        const auto firstStatesIterator = inputHistory.getStateIterator(inputHistory.lastSent + 1);
+
+        std::vector<ControllerState> toSend;
+
+        for (auto it = firstStatesIterator; it < inputHistory.history.end(); it++) {
+            const auto &newState = (*it)[0];
+
+            if (it == inputHistory.history.begin()) {
+                toSend.push_back(newState);
+
+                continue;
+            }
+
+            const auto &oldState = (*(it - 1))[0];
+
+            if (newState != oldState) {
+                toSend.push_back(newState);
+            }
+        }
+
+        if (toSend.size()) {
+            PlayerInput inputTransferMessage(game, toSend);
+
+            application.communicator.send(inputTransferMessage);
+
+            inputHistory.historySent(timestamp);
+        }
+    }
 }

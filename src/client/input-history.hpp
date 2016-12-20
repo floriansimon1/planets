@@ -22,7 +22,7 @@ struct InputHistory {
     void startBuffering(sf::Int32 timestamp, size_t nbRemotePlayers);
     const std::vector<ControllerState>& operator[](Id stateId);
     void bufferLocalPlayerInput(sf::Int32 timestamp);
-    bool shouldSendPlayerInput(sf::Int32 timestamp);
+    bool shouldFlush(sf::Int32 timestamp);
     void historySent(sf::Int32 timestamp);
     void ackInputHistory(Id ackedId);
     void historyDisplayed();

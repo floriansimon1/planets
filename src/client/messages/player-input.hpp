@@ -8,12 +8,12 @@
 #include "../../network/outgoing-message.hpp"
 
 struct PlayerInput: OutgoingMessage {
-    PlayerInput(const Host &h, const std::deque<std::vector<ControllerState>> &inputs);
+    PlayerInput(const Host &h, const std::vector<ControllerState> &inputs);
 
     virtual void prepare();
 
     private:
-        std::deque<std::vector<ControllerState>> inputs;
+        std::vector<ControllerState> inputs;
 };
 
 #endif

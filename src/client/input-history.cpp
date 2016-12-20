@@ -60,7 +60,7 @@ const std::vector<ControllerState>& InputHistory::operator[](Id stateId) {
     return *getStateIterator(stateId);
 }
 
-bool InputHistory::shouldSendPlayerInput(sf::Int32 timestamp) {
+bool InputHistory::shouldFlush(sf::Int32 timestamp) {
     const auto difference = timestamp - history[lastSent][0].timestamp;
 
     // Advance the last send input by as many ticks as needed, and returns true.
