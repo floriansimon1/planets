@@ -1,10 +1,10 @@
 #ifndef GET_CURRENT_TICK_HANDLER
 #define GET_CURRENT_TICK_HANDLER
 
-#include "../../network/message-handler.hpp"
+#include "./server-message-handler.hpp"
 
-struct GetCurrentTickHandler: MessageHandler {
-    virtual void handle(Communicator &communicator, Message &message, AgentState &state) const;
+struct GetCurrentTickHandler: ServerMessageHandler {
+    virtual void doHandle(ServerApplication &application, Message &message) const;
 };
 
 #endif

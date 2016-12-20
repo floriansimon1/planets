@@ -1,13 +1,10 @@
 #ifndef CONNECTION_REQUEST_HANDLER_HPP
 #define CONNECTION_REQUEST_HANDLER_HPP
 
-#include "../../network/message.hpp"
-#include "../../core/agent-state.hpp"
-#include "../../network/communicator.hpp"
-#include "../../network/message-handler.hpp"
+#include "./server-message-handler.hpp"
 
-struct ConnectionRequestHandler: MessageHandler {
-    virtual void handle(Communicator &communicator, Message &message, AgentState &state) const;
+struct ConnectionRequestHandler: ServerMessageHandler {
+    virtual void doHandle(ServerApplication &application, Message &message) const;
 };
 
 #endif

@@ -1,17 +1,13 @@
 #include "../messages/connection-authorized.hpp"
 #include "./connection-request-handler.hpp"
 #include "../../network/network.hpp"
-#include "../server-state.hpp"
+#include "../states/serve-game.hpp"
 #include "../client.hpp"
 
 #include <iostream>
 
-void ConnectionRequestHandler::handle(
-    Communicator &communicator,
-    Message &message,
-    AgentState &s
-) const {
-    ServerState &state = (ServerState&) s;
+void ConnectionRequestHandler::doHandle(ServerApplication &application, Message &message) const {
+    auto &step = static_cast<ServeGame&>(*application.getCurrentStep());
 
     Client newPlayer;
 
@@ -21,12 +17,12 @@ void ConnectionRequestHandler::handle(
     packetRead(message.packet, newPlayer.name);
 
     // Reads successful. We add our client to the world.
-    state.world.players.push_back(newPlayer);
+    step.world.players.push_back(newPlayer);
 
     // Copies the host - this is a direct reply.
     ConnectionAuthorized response(newPlayer.host);
 
-    communicator.send(response);
+    application.communicator.send(response);
 
     std::cout
     << ">> Connection request from " << message.host.toString() << "\n"

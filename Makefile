@@ -27,6 +27,7 @@ server:
         src/network/*.cpp \
         src/planets-server.cpp \
         -o ./bin/planets-server \
+		src/server/states/*.cpp \
         src/server/handlers/*.cpp \
         src/server/messages/*.cpp \
         -g \

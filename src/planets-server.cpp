@@ -2,17 +2,15 @@
 #include <iostream>
 #include <unistd.h>
 
-#include "./server/server-state.hpp"
-#include "./server/server-communicator.hpp"
+#include "./server/server-application.hpp"
 
 int main(void) {
-    ServerCommunicator server;
-    ServerState        state;
+    ServerApplication server;
 
     std::cout << ">> PLANETS (server)" << std::endl;
 
-    while (!server.exit) {
-        server.serve(state);
+    while (!server.shouldExit()) {
+        server.run();
 
         usleep(10000);
     }

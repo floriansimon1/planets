@@ -1,10 +1,10 @@
-#ifndef CLIENT_INPUT_HPP
-#define CLIENT_INPUT_HPP
+#ifndef CLIENT_INPUT_HANDLER_HPP
+#define CLIENT_INPUT_HANDLER_HPP
 
-#include "../../network/message-handler.hpp"
+#include "./server-message-handler.hpp"
 
-struct ClientInputHandler: MessageHandler {
-    virtual void handle(Communicator &communicator, Message &message, AgentState &state) const;
+struct ClientInputHandler: ServerMessageHandler {
+    virtual void doHandle(ServerApplication &application, Message &message) const;
 };
 
 #endif

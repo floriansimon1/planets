@@ -11,19 +11,6 @@ ServerCommunicator::ServerCommunicator(): Communicator(serverHandlers()) {
     socket.setBlocking(false);
 }
 
-void ServerCommunicator::serve(ServerState &state) {
-    publish(state);
-    process(state);
-}
-
-void ServerCommunicator::publish(ServerState &state) {
-    sf::Packet announcement;
-
-    announcement
-    << "PLANETS"
-    << (sf::Uint16) SERVER_PORT
-    << (sf::Uint8) state.world.players.size()
-    << (sf::Uint8) state.maxPlayers;
-
+void ServerCommunicator::broadcast(sf::Packet &&announcement) {
     socket.send(announcement, sf::IpAddress::Broadcast, BROADCAST_PORT);
 }

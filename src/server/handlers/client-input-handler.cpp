@@ -1,5 +1,4 @@
 #include "./client-input-handler.hpp"
 
-void ClientInputHandler::handle(Communicator &communicator, Message &message, AgentState &state) const {
-    
+void ClientInputHandler::doHandle(ServerApplication &application, Message &message) const {
 }

@@ -1,19 +1,20 @@
 #include "./get-current-tick-handler.hpp"
-#include "../../network/communicator.hpp"
 #include "../../network/network.hpp"
+#include "../states/serve-game.hpp"
 #include "../messages/pong.hpp"
-#include "../server-state.hpp"
 
-void GetCurrentTickHandler::handle(Communicator &communicator, Message &message, AgentState &statePointer) const {
-    const auto &state = ((ServerState&) statePointer);
+#include <iostream>
+
+void GetCurrentTickHandler::doHandle(ServerApplication &application, Message &message) const {
+    const auto &step = static_cast<ServeGame&>(*application.getCurrentStep());
 
     Id requestId;
 
     packetRead(message.packet, requestId);
 
-    Pong pong(message.host, requestId, state.world.worldClock);
+    Pong pong(message.host, requestId, step.world.worldClock);
 
     std::cout << ">> Received a ping" << std::endl;
 
-    communicator.send(pong);
+    application.communicator.send(pong);
 }
