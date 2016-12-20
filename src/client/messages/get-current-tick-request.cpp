@@ -3,6 +3,7 @@
 #include "../../network/network.hpp"
 
 void GetCurrentTickRequest::prepare() {
-    packetWrite(packet, PING);
+    packetTypeWrite(packet, MessageType::Ping);
+
     packetWrite(packet, requestId);
 }

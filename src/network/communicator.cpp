@@ -41,7 +41,7 @@ void Communicator::processNextMessagesBatch(Application &application, unsigned i
 
             MessageType type;
 
-            packetRead(message.packet, type);
+            packetTypeRead(message.packet, type);
 
             if (messageHandlers.count(type)) {
                 messageHandlers[type]->handle(application, message);

@@ -9,7 +9,8 @@ JoinGameMessage::JoinGameMessage(const Host &h, const std::string &n, unsigned s
 }
 
 void JoinGameMessage::prepare() {
-    packetWrite(packet, CONNECTION_REQUEST);
+    packetTypeWrite(packet, MessageType::ConnectionRequest);
+
     packetWrite(packet, localPort);
     packetWrite(packet, name);
 }

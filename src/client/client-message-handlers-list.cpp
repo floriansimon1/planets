@@ -6,8 +6,8 @@
 std::map<MessageType, std::shared_ptr<MessageHandler>> clientHandlers() {
     std::map<MessageType, std::shared_ptr<MessageHandler>> handlers;
 
-    handlers[CONNECTION_RESPONSE] = std::make_shared<ConnectionResponseHandler>();
-    handlers[PING]                = std::make_shared<PongHandler>();
+    handlers[MessageType::ConnectionResponse] = std::make_shared<ConnectionResponseHandler>();
+    handlers[MessageType::Ping]               = std::make_shared<PongHandler>();
 
     return handlers;
 }

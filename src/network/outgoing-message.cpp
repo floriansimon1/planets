@@ -4,7 +4,7 @@
 OutgoingMessage::OutgoingMessage(const Host &h) {
     host = h;
 
-    packetWrite(packet, "PLANETS");
+    preparePlanetsPacket(packet);
 }
 
 void OutgoingMessage::doPrepare() {

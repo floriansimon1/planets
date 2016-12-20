@@ -3,6 +3,7 @@
 #include "../../network/message-types.hpp"
 
 void ConnectionAuthorized::prepare() {
-    packetWrite(packet, CONNECTION_RESPONSE);
+    packetTypeWrite(packet, MessageType::ConnectionResponse);
+
     packetWrite(packet, true);
 }
