@@ -8,10 +8,10 @@
 #include "../network/host.hpp"
 
 struct Client: Player {
-    std::experimental::optional<sf::Int32> lastRecordedTimestamp;
-    Host                                   host;
+    sf::Int32 lastRecordedTimestamp;
+    Host      host;
 
-    std::experimental::optional<sf::Int32> validateTimestamp(sf::Int32 timestamp) const;
+    bool validateTimestamp(sf::Int32 timestamp) const;
 };
 
 #endif
