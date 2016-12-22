@@ -7,11 +7,10 @@
 
 struct ControllerState: Controller {
     sf::Int32 timestamp;
-
-    bool backward;
-    bool forward;
-    bool right;
-    bool left;
+    bool      backward;
+    bool      forward;
+    bool      right;
+    bool      left;
 
     virtual bool accelerateBackward() const { return backward; }
     virtual bool accelerate() const         { return forward;  }

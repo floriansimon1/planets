@@ -8,7 +8,8 @@ ControllerState::ControllerState(sf::Int32 t, const Controller &controller):
     backward(controller.accelerateBackward()),
     forward(controller.accelerate()),
     right(controller.turnRight()),
-    left(controller.turnLeft()) {
+    left(controller.turnLeft())
+{
 }
 
 ControllerState::ControllerState(sf::Int32 t):
@@ -16,8 +17,11 @@ ControllerState::ControllerState(sf::Int32 t):
     backward(false),
     forward(false),
     right(false),
-    left(false) {
+    left(false)
+{
 }
 
-ControllerState::ControllerState(const ControllerState &state): ControllerState(state.timestamp, state) {
+ControllerState::ControllerState(const ControllerState &state):
+    ControllerState(state.timestamp, state)
+{
 }

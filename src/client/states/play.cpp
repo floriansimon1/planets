@@ -20,14 +20,14 @@ sf::Int32 Play::getServerTimestamp() const {
 }
 
 void Play::processInputHistory(Id from) {
-    const auto &lastDisplayedIterator = inputHistory.getStateIterator(inputHistory.lastDisplayed);
+    const auto &lastProcessedIterator = inputHistory.getStateIterator(inputHistory.lastProcessed);
 
-    const auto &lastDisplayed = *lastDisplayedIterator;
+    const auto &lastProcessed = *lastProcessedIterator;
 
     std::accumulate(
-        lastDisplayedIterator + 1,
+        lastProcessedIterator + 1,
         inputHistory.history.end(),
-        lastDisplayed.timestamp,
+        lastProcessed.timestamp,
 
         [this] (auto start, auto &controllerState) {
             std::vector<ControllerState> states { controllerState };
@@ -55,9 +55,9 @@ void Play::doProcess(ClientApplication &application) {
 
     inputHistory.bufferInput(timestamp, gamepad);
 
-    processInputHistory(inputHistory.lastDisplayed);
+    processInputHistory(inputHistory.lastProcessed);
 
-    inputHistory.historyDisplayed();
+    inputHistory.historyProcessed();
 
     if (inputHistory.shouldSend(timestamp)) {
         const auto firstStatesIterator = inputHistory.getStateIterator(inputHistory.lastSent + 1);

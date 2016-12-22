@@ -1,10 +1,12 @@
+#include <cassert>
+
 #include "./input-history.hpp"
 #include "../boilerplate/drop.hpp"
 
-// Implementation note: we should always have at least two entries in the history.
+// Implementation note: we should always have at least one entry in the history.
 
 void InputHistory::startBuffering(sf::Int32 timestamp, const Controller &initial) {
-    lastDisplayed = 0;
+    lastProcessed = 0;
     lastDiscarded = 0;
 
     if (history.empty()) {
@@ -12,6 +14,12 @@ void InputHistory::startBuffering(sf::Int32 timestamp, const Controller &initial
     } else {
         drop(history, history.size() - 1);
     }
+}
+
+const ControllerState& InputHistory::getLastEntry() const {
+    assert(!history.empty());
+
+    return history.back();
 }
 
 void InputHistory::bufferInput(sf::Int32 timestamp, const Controller &controller) {
@@ -26,8 +34,8 @@ std::vector<ControllerState>::iterator InputHistory::getStateIterator(Id stateId
     return history.begin() + (stateId - lastDiscarded);
 }
 
-void InputHistory::historyDisplayed() {
-    lastDisplayed = history.size() - 1;
+void InputHistory::historyProcessed() {
+    lastProcessed = history.size() - 1;
 }
 
 void InputHistory::discardUpTo(Id upToId) {

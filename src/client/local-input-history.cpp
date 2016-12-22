@@ -6,7 +6,7 @@ void LocalInputHistory::beforeBufferingStarts(sf::Int32 timestamp) {
 }
 
 bool LocalInputHistory::shouldSend(sf::Int32 timestamp) {
-    const auto difference = timestamp - history[lastSent].timestamp;
+    const auto difference = timestamp - getStateIterator(lastSent)->timestamp;
 
     // Advance the last send input by as many ticks as needed, and returns true.
     if (difference >= TICK_DELAY) {

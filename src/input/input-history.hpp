@@ -10,15 +10,16 @@
 
 struct InputHistory {
     Id                           lastDiscarded;
-    Id                           lastDisplayed;
+    Id                           lastProcessed;
     std::vector<ControllerState> history;
 
     std::vector<ControllerState>::iterator getStateIterator(Id stateId);
     void startBuffering(sf::Int32 timestamp, const Controller &initial);
     void bufferInput(sf::Int32 timestamp, const Controller &controller);
     const ControllerState& operator[](Id stateId);
+    const ControllerState& getLastEntry() const;
     void discardUpTo(Id ackedId);
-    void historyDisplayed();
+    void historyProcessed();
 
     protected:
         // For child classes only.
