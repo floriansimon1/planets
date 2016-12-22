@@ -5,21 +5,21 @@
 #include <string>
 
 #include "../../core/world.hpp"
-#include "../input-history.hpp"
 #include "../../input/gamepad.hpp"
 #include "./synchronize-clocks.hpp"
 #include "../../network/network.hpp"
+#include "../local-input-history.hpp"
 #include "../../input/controller-state.hpp"
 
 struct Play: ClientState {
-    sf::Int32    serverClockOffset;
-    InputHistory inputHistory;
-    World        serverWorld;
-    sf::Int32    latency;
-    Gamepad      gamepad;
-    World        world;
-    Host         game;
-    std::string  name;
+    sf::Int32         serverClockOffset;
+    LocalInputHistory inputHistory;
+    World             serverWorld;
+    sf::Int32         latency;
+    Gamepad           gamepad;
+    World             world;
+    Host              game;
+    std::string       name;
 
     sf::Int32 getServerTimestamp() const;
 

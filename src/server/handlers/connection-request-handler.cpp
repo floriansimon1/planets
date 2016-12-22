@@ -11,6 +11,8 @@ void ConnectionRequestHandler::doHandle(ServerApplication &application, Message 
 
     Client newPlayer;
 
+    newPlayer.inputHistory.startBuffering(0, Controller::inertPlayerControllerState());
+
     newPlayer.host = message.host;
 
     packetRead(message.packet, newPlayer.host.port);

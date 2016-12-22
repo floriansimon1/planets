@@ -12,7 +12,7 @@ Play::Play(const Host &g, sf::Int32 l, sf::Int32 o):
 {
     world.worldClock.restart();
 
-    inputHistory.startBuffering(getServerTimestamp(), 0);
+    inputHistory.startBuffering(getServerTimestamp(), gamepad);
 }
 
 sf::Int32 Play::getServerTimestamp() const {
@@ -27,9 +27,11 @@ void Play::processInputHistory(Id from) {
     std::accumulate(
         lastDisplayedIterator + 1,
         inputHistory.history.end(),
-        lastDisplayed[0].timestamp,
+        lastDisplayed.timestamp,
 
-        [this] (auto start, auto &states) {
+        [this] (auto start, auto &controllerState) {
+            std::vector<ControllerState> states { controllerState };
+
             sf::Int32 timestamp = states[0].timestamp;
 
             // Calculates the elapsed time to advance the simulation.
@@ -51,19 +53,19 @@ bool Play::isGameState() const {
 void Play::doProcess(ClientApplication &application) {
     const auto timestamp = getServerTimestamp();
 
-    inputHistory.bufferLocalPlayerInput(timestamp);
+    inputHistory.bufferInput(timestamp, gamepad);
 
     processInputHistory(inputHistory.lastDisplayed);
 
     inputHistory.historyDisplayed();
 
-    if (inputHistory.shouldFlush(timestamp)) {
+    if (inputHistory.shouldSend(timestamp)) {
         const auto firstStatesIterator = inputHistory.getStateIterator(inputHistory.lastSent + 1);
 
         std::vector<ControllerState> toSend;
 
         for (auto it = firstStatesIterator; it < inputHistory.history.end(); it++) {
-            const auto &newState = (*it)[0];
+            const auto &newState = *it;
 
             if (it == inputHistory.history.begin()) {
                 toSend.push_back(newState);
@@ -71,7 +73,7 @@ void Play::doProcess(ClientApplication &application) {
                 continue;
             }
 
-            const auto &oldState = (*(it - 1))[0];
+            const auto &oldState = *(it - 1);
 
             if (newState != oldState) {
                 toSend.push_back(newState);

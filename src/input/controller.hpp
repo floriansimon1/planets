@@ -11,6 +11,8 @@ struct Controller {
     virtual bool turnLeft() const           { return false; }
 
     bool operator!=(const Controller &c) const;
+
+    static Controller inertPlayerControllerState();
 };
 
 #endif
