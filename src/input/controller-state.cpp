@@ -25,3 +25,7 @@ ControllerState::ControllerState(const ControllerState &state):
     ControllerState(state.timestamp, state)
 {
 }
+
+bool ControllerState::isForged() const {
+    return false;
+}

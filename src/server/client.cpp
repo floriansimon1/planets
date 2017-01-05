@@ -1,15 +1,19 @@
-#include <iostream>
-
 #include "./client.hpp"
 
-bool Client::validateTimestamp(sf::Int32 timestamp) const {
-    return timestamp > inputHistory.getLastEntry().timestamp;
-}
-
 void Client::bufferControllerState(const ControllerState &state) {
-    if (!validateTimestamp(state.timestamp)) {
-        std::cout << ">> Discarding player input buffer" << std::endl;
+    const auto &firstEntry = *player.inputHistory.history.begin();
 
-        return;
+    /*
+    * For laggy/cheating players, we ignore antidated controller states.
+    * In that case, we replace the first state in the buffer history with
+    * what we've received from the client, but with a corrected timestamp.
+    * Otherwise, we just push the input inside the history.
+    */
+    if (firstEntry.timestamp < state.timestamp) {
+        player.inputHistory.history.pop_front();
+
+        player.inputHistory.history.push_front(ControllerState(firstEntry.timestamp, state));
+    } else {
+        player.inputHistory.insertControllerState(state);
     }
 }

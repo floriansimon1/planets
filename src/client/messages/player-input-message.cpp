@@ -1,14 +1,14 @@
-#include "./player-input.hpp"
 #include "../../network/network.hpp"
+#include "./player-input-message.hpp"
 #include "../../network/message-types.hpp"
 
-PlayerInput::PlayerInput(const Host &h,  const std::vector<ControllerState> &i):
+PlayerInputMessage::PlayerInputMessage(const Host &h,  const std::list<ControllerState> &i):
     OutgoingMessage(h),
     inputs(i)
 {
 }
 
-void PlayerInput::prepare() {
+void PlayerInputMessage::prepare() {
     if (inputs.empty()) {
         error = true;
 

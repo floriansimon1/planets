@@ -5,7 +5,7 @@
 
 #include "./controller.hpp"
 
-struct ControllerState: Controller {
+struct ControllerState: Controller, Forgeable {
     sf::Int32 timestamp;
     bool      backward;
     bool      forward;

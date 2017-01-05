@@ -1,17 +1,15 @@
 #ifndef LOCAL_INPUT_HISTORY_HPP
 #define LOCAL_INPUT_HISTORY_HPP
 
-#include "../input/input-history.hpp"
+#include "../input/input-history-transfer-bookmark.hpp"
+#include "../input/input-history-processing-bookmark.hpp"
 
 struct LocalInputHistory: InputHistory {
-    sf::Int32 lastSentTime = 0;
-    Id        lastSent     = 0;
+    InputHistory                   inputHistory;
+    InputHistoryTransferBookmark   sendBookmark;
+    InputHistoryProcessingBookmark processingBookmark;
 
-    bool shouldSend(sf::Int32 timestamp);
-    void historySent(sf::Int32 timestamp);
-
-    protected:
-        virtual void beforeBufferingStarts(sf::Int32 timestamp) override;
+    LocalInputHistory();
 };
 
 #endif

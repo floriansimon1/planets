@@ -9,7 +9,7 @@ struct ClientState: State {
     // Adapter method that casts application parameters to client application parameters.
     virtual void process(Application &application);
 
-    virtual void doProcess(ClientApplication &ClientApplication) = 0;
+    virtual void doProcess(ClientApplication &application) = 0;
 
     // Callbacks on specific events.
     virtual void onConnection(ClientApplication &application) {}

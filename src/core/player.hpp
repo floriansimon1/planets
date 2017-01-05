@@ -2,12 +2,13 @@
 #define PLAYER_H
 
 #include <SFML/System.hpp>
-#include <iostream>
-#include <memory>
 
 #include "./entity.hpp"
+#include "../input/input-history.hpp"
 
 struct Player: Entity {
+    InputHistory inputHistory;
+
     std::string name;
 
     // In units/s.

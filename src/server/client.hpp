@@ -8,11 +8,9 @@
 #include "../network/host.hpp"
 #include "../input/input-history.hpp"
 
-struct Client: Player {
-    InputHistory inputHistory;
-    Host         host;
-
-    bool validateTimestamp(sf::Int32 timestamp) const;
+struct Client {
+    Player player;
+    Host   host;
 
     void bufferControllerState(const ControllerState &state);
 };

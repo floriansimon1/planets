@@ -1,33 +1,19 @@
-#include "../messages/connection-authorized.hpp"
 #include "./connection-request-handler.hpp"
+#include "../states/server-state.hpp"
 #include "../../network/network.hpp"
-#include "../states/serve-game.hpp"
 #include "../client.hpp"
 
 #include <iostream>
 
 void ConnectionRequestHandler::doHandle(ServerApplication &application, Message &message) const {
-    auto &step = static_cast<ServeGame&>(*application.getCurrentStep());
+    auto &state = static_cast<ServerState&>(*application.getCurrentStep());
 
-    Client newPlayer;
+    Client newClient;
 
-    newPlayer.inputHistory.startBuffering(0, Controller::inertPlayerControllerState());
+    newClient.host = message.host;
 
-    newPlayer.host = message.host;
+    packetRead(message.packet, newClient.host.port);
+    packetRead(message.packet, newClient.player.name);
 
-    packetRead(message.packet, newPlayer.host.port);
-    packetRead(message.packet, newPlayer.name);
-
-    // Reads successful. We add our client to the world.
-    step.world.players.push_back(newPlayer);
-
-    // Copies the host - this is a direct reply.
-    ConnectionAuthorized response(newPlayer.host);
-
-    application.communicator.send(response);
-
-    std::cout
-    << ">> Connection request from " << message.host.toString() << "\n"
-    << ">> " << newPlayer.name << " joined the game"
-    << std::endl;
+    state.onJoin(application, newClient);
 }

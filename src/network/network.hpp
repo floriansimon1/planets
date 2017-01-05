@@ -5,6 +5,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 
+#include "../boilerplate/id.hpp"
 #include "./message-types.hpp"
 
 // In ms.
@@ -33,9 +34,6 @@ void packetTypeWrite(sf::Packet &packet, MessageType type);
 void packetTypeRead(sf::Packet &packet, MessageType &type);
 
 void preparePlanetsPacket(sf::Packet &packet);
-
-// An ID number that can be sent over the wire safely via packet stream operations.
-using Id = sf::Uint64;
 
 void bindToAnyAvailablePort(sf::UdpSocket &s);
 

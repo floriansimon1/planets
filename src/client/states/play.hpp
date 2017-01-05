@@ -29,7 +29,7 @@ struct Play: ClientState {
     virtual bool isGameState() const;
 
     private:
-        void processInputHistory(Id from);
+        void processInput(sf::Int32 timestamp);
 };
 
 #endif
