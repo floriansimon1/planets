@@ -2,14 +2,19 @@
 #define CLIENT_APPLICATION_HPP
 
 #include <string>
+#include <thread>
+#include <SFML/Graphics.hpp>
 
 #include "../core/application.hpp"
+#include "../graphics/renderer.hpp"
 #include "./client-communicator.hpp"
 
 struct ClientApplication: Application {
-    std::string localPlayerName;
+    sf::RenderWindow &window;
+    Renderer         renderer;
+    std::string      localPlayerName;
 
-    ClientApplication();
+    ClientApplication(sf::RenderWindow &window);
 
     /*
     * Used to avoid pointers when calling the application constructor

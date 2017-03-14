@@ -3,6 +3,7 @@
 
 #include <SFML/System.hpp>
 
+#include "./world.hpp"
 #include "./entity.hpp"
 #include "../input/input-history.hpp"
 
@@ -18,13 +19,13 @@ struct Player: Entity {
     float yaw;
 
     // In units/s-2.
-    const float thrust = 300.f;
+    static const float thrust = 300.f;
 
     // In degrees/s.
-    const float yawChangeSpeed = 180.f;
+    static const float yawChangeSpeed = 180.f;
 
     // In units/s.
-    const float speedCap = 100.f;
+    static const float speedCap = 100.f;
 
     Player(): Entity(150.f, 150.f), inertia(0.f, 0.f), yaw(90.f) {}
 
@@ -44,6 +45,8 @@ struct Player: Entity {
         const sf::Vector2f &inertia,
         const sf::Vector2f &worldDimensions
     ) const;
+
+    Player move(sf::Int32 elapsedTime, const World &world, const ControllerState &state);
 };
 
 #endif

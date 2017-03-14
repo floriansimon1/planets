@@ -2,5 +2,7 @@
 #include "./server-application.hpp"
 
 ServerApplication::ServerApplication(): Application(serverCommunicator) {
-    stepStack.push(std::make_shared<ServeGame>());
+    addStep(std::make_shared<ServeGame>());
+
+    start();
 }

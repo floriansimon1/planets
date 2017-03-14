@@ -70,5 +70,5 @@ void ServeGame::doProcess(ServerApplication &application) {
 
     const auto timestamp = getGameTimestamp() - processingDelay;
 
-
+    
 }

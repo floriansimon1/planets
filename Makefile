@@ -1,7 +1,8 @@
 client:
 	g++ \
-		-std=c++1z \
+        -std=c++1z \
         -Wall \
+        -O2 \
         src/core/*.cpp \
         src/math/*.cpp \
         src/input/*.cpp \
@@ -9,7 +10,7 @@ client:
         src/network/*.cpp \
         src/graphics/*.cpp \
         src/planets-client.cpp \
-		src/client/states/*.cpp \
+        src/client/states/*.cpp \
         src/client/handlers/*.cpp \
         src/client/messages/*.cpp \
         -g \
@@ -18,8 +19,9 @@ client:
 
 server:
 	g++ \
-		-std=c++1z \
+        -std=c++1z \
         -Wall \
+        -O2 \
         src/core/*.cpp \
         src/math/*.cpp \
         src/input/*.cpp \
@@ -27,7 +29,7 @@ server:
         src/network/*.cpp \
         src/planets-server.cpp \
         -o ./bin/planets-server \
-		src/server/states/*.cpp \
+        src/server/states/*.cpp \
         src/server/handlers/*.cpp \
         src/server/messages/*.cpp \
         -g \

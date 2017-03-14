@@ -4,6 +4,13 @@
 #include "./client-application.hpp"
 #include "./states/searching-games.hpp"
 
-ClientApplication::ClientApplication(): Application(clientCommunicator) {
-    stepStack.push(std::make_shared<SearchingGames>());
+ClientApplication::ClientApplication(sf::RenderWindow &w):
+    Application(clientCommunicator),
+    window(w),
+    renderer(w),
+    localPlayerName("Paul")
+{
+    addStep(std::make_shared<SearchingGames>());
+
+    start();
 }

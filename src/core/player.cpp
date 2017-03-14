@@ -99,3 +99,30 @@ sf::Vector2f Player::computeNewPosition(
 
     return sf::Vector2f(x, y);
 }
+
+Player Player::move(sf::Int32 elapsedTime, const World &world, const ControllerState &controller) {
+    Player updatedPlayer(*this);
+
+    updatedPlayer.yaw = computeNewYaw(
+        elapsedTime,
+        controller.turnLeft(),
+        controller.turnRight()
+    );
+
+    updatedPlayer.inertia = computeNewInertia(
+        elapsedTime,
+        controller.accelerate(),
+        controller.accelerateBackward(),
+        inertia,
+        yaw
+    );
+
+    updatedPlayer.position = computeNewPosition(
+        elapsedTime,
+        position,
+        inertia,
+        world.dimensions
+    );
+
+    return updatedPlayer;
+}

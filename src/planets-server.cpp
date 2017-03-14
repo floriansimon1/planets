@@ -1,6 +1,5 @@
 #include <cstdlib>
 #include <iostream>
-#include <unistd.h>
 
 #include "./server/server-application.hpp"
 
@@ -9,11 +8,7 @@ int main(void) {
 
     std::cout << ">> PLANETS (server)" << std::endl;
 
-    while (!server.shouldExit()) {
-        server.run();
-
-        usleep(10000);
-    }
+    server.awaitTermination();
 
     return EXIT_SUCCESS;
 }
