@@ -1,13 +1,16 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 
-#include <SFML/System.hpp>
+#include <chrono>
 
-// An object in the game "world".
+#include "./movement.hpp"
+#include "./physical-parameters.hpp"
+
+// Angles are expressed in radians, distances in abstract units.
 struct Entity {
-    sf::Vector2f position;
+    const PhysicalParameters physicalParameters;
 
-    Entity(float x, float y): position(x, y) {}
+    Entity refresh(const Movement &movement, std::chrono::milliseconds dt) const;
 };
 
 #endif

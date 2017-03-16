@@ -8,6 +8,7 @@ template <typename Type>
 struct Optional: std::experimental::optional<Type> {
     Optional(const Type &x): std::experimental::optional<const Type>(x) {}
     Optional(Type &x): std::experimental::optional<Type>(x) {}
+    Optional() {}
 };
 
 #endif

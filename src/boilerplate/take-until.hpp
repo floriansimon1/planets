@@ -10,7 +10,7 @@ CollectionWindow<Collection> takeUntil(
     CollectionWindow<Collection> window
 ) {
     if (window.empty()) {
-        return;
+        return window;
     }
 
     auto &start = window.begin();
