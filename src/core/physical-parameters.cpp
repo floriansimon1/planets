@@ -91,6 +91,8 @@ void PhysicalParameters::refresh(const Movement &movement, std::chrono::millisec
 
     const auto k4 = getDerivative(movement, *this, &k3, dt / 2);
 
+    // TODO: recalculate clamped angle, and clamp position.
+
     speed = (float) dt.count() * getRk4Coefficient(
         [] (const auto &derivative) {
             return derivative.dSpeed;
